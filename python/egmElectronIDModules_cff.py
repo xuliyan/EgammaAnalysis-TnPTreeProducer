@@ -140,4 +140,18 @@ def setIDs(process, options):
 
         for wp in workingPoints: getProbes(wp)
 
+    if options['addTTV'] :
+
+        from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff  import workingPoints
+
+        process.ttv_ele_sequence = cms.Sequence()
+
+        def getProbes(name):
+            temp = process.probeEleCutBasedVeto.clone()
+            temp.selection = cms.InputTag('ttvEleVarHelper:pass' + wp)
+            setattr(process, 'probes' + name, temp)
+            process.ttv_ele_sequence += temp
+
+        for wp in workingPoints: getProbes(wp)
+
 

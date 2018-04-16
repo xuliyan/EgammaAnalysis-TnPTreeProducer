@@ -16,7 +16,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doEleID", False,
+    "doEleID", True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
@@ -101,7 +101,7 @@ options['SUPERCLUSTER_CUTS']    = "abs(eta)<2.5 &&  et>5.0"
 options['PHOTON_CUTS']          = "(abs(-log(tan(superCluster.position.theta/2)))<=2.5) && pt> 10"
 options['ELECTRON_TAG_CUTS']    = "(abs(-log(tan(superCluster.position.theta/2)))<=2.1) && !(1.4442<=abs(-log(tan(superClusterPosition.theta/2)))<=1.566) && pt >= 30.0"
 
-options['MAXEVENTS']            = cms.untracked.int32(varOptions.maxEvents) 
+options['MAXEVENTS']            = cms.untracked.int32(2000)
 options['DoTrigger']            = cms.bool( varOptions.doTrigger )
 options['DoRECO']               = cms.bool( varOptions.doRECO    )
 options['DoEleID']              = cms.bool( varOptions.doEleID   )
@@ -112,9 +112,12 @@ options['DEBUG']                = cms.bool(False)
 options['isMC']                 = cms.bool(False)
 options['UseCalibEn']           = varOptions.calibEn
 
-options['addSUSY']               = cms.bool(True)
+options['addSUSY']              = cms.bool(False)
+options['addTTV']               = cms.bool(True)
+options['is2016']               = cms.bool(False)
 if options['useAOD']: 
     options['addSUSY']               = cms.bool(False)
+    options['addTTV']                = cms.bool(False)
 
 if (varOptions.isMC):
     options['isMC']                = cms.bool(True)
@@ -198,6 +201,7 @@ if options['DoPhoID']   : print "  -- Producing photon SF tree      -- "
 ###################################################################
 process.cand_sequence = cms.Sequence( process.init_sequence + process.tag_sequence )
 if options['addSUSY']                         : process.cand_sequence += process.susy_ele_sequence
+if options['addTTV']                          : process.cand_sequence += process.ttv_ele_sequence
 if options['DoEleID'] or options['DoTrigger'] : process.cand_sequence += process.ele_sequence
 if options['DoPhoID']                         : process.cand_sequence += process.pho_sequence
 if options['DoTrigger']                       : process.cand_sequence += process.hlt_sequence
@@ -296,6 +300,9 @@ if not options['useAOD'] :
     setattr( process.tnpEleTrig.flags, 'passingHLTsafe', cms.InputTag("probeEleHLTsafe" ) )
     setattr( process.tnpEleIDs.flags , 'passingHLTsafe', cms.InputTag("probeEleHLTsafe" ) )
 
+def addFlag(name):
+    setattr( process.tnpEleIDs.flags, 'passing'+name, cms.InputTag('probes'+name ) )
+
 # Add SUSY variables to the "variables", add SUSY IDs to the "flags"
 if options['addSUSY'] :
     setattr( process.tnpEleIDs.variables , 'el_miniIsoChg', cms.string("userFloat('miniIsoChg')") )
@@ -304,10 +311,13 @@ if options['addSUSY'] :
     setattr( process.tnpEleIDs.variables , 'el_ptRel', cms.string("userFloat('ptRel')") )
     setattr( process.tnpEleIDs.variables , 'el_MVATTH', cms.InputTag("electronMVATTH") )   
     setattr( process.tnpEleIDs.variables , 'el_sip3d', cms.InputTag("susyEleVarHelper:sip3d") )
-    def addFlag(name):
-        setattr( process.tnpEleIDs.flags, 'passing'+name, cms.InputTag('probes'+name ) )
     from EgammaAnalysis.TnPTreeProducer.electronsExtrasSUSY_cff  import workingPoints
     for wp in workingPoints: addFlag(wp)
+
+if options['addTTV'] :
+    from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff  import workingPoints
+    for wp in workingPoints: addFlag(wp)
+
 
 
 tnpSetup.customize( process.tnpEleTrig , options )

@@ -63,6 +63,12 @@ def setGoodParticlesMiniAOD(process, options):
         eleSusyID.addSusyIDs( process, options )
         options['ELECTRON_COLL']        = "slimmedElectronsWithUserData"
 
+    if options['addTTV']:
+        import EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff as eleTTVID
+        eleTTVID.addTTVIDs( process, options )
+        options['ELECTRON_COLL']        = "slimmedElectronsWithUserData"
+
+
     process.eleVarHelper = cms.EDProducer("PatElectronVariableHelper",
                                           probes           = cms.InputTag(options['ELECTRON_COLL']),
                                           l1EGColl         = cms.InputTag('caloStage2Digis:EGamma'),
