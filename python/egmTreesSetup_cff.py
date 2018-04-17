@@ -144,13 +144,12 @@ def setSequences(process, options):
             )
         process.init_sequence += process.enCalib_sequence
 
-    from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff import ttvUserFloatsSeq, ttvVarHelper
     if options['addSUSY'] : process.init_sequence += process.susy_sequence
-    if options['addTTV'] :  process.init_sequence += ttvUserFloatsSeq(process, options)
+    if options['addTTV'] :  process.init_sequence += process.ttv_sequence
     process.init_sequence += process.egmGsfElectronIDSequence
     process.init_sequence += process.eleVarHelper 
     if options['addSUSY'] : process.init_sequence += process.susy_sequence_requiresVID
-    if options['addTTV'] :  process.init_sequence += ttvVarHelper(process, options)
+    if options['addTTV'] :  process.init_sequence += process.ttvEleVarHelper
 
 
 

@@ -158,7 +158,6 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
 
     float dxy      = fabs(probe.dB(pat::Electron::PV2D));
     float dz       = fabs(probe.dB(pat::Electron::PVDZ));
-
     pt             = pp->pt();
     eta            = fabs(pp->eta());
     trackMult      = probe.userFloat("jetNDauChargedMVASel");

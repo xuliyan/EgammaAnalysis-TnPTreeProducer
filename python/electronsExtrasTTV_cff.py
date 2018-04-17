@@ -1,8 +1,4 @@
-
-
-
 import FWCore.ParameterSet.Config as cms
-from math import ceil,log
 
 # All workingpoints we need to probe
 workingPoints = ["TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTTVLeptonMvaL","RTTVLeptonMvaM","RTTVLeptonMvaT","TightCharge"]
@@ -10,7 +6,7 @@ workingPoints = ["TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTT
 #
 # Sequence to add userfloats
 #
-def ttvUserFloatsSeq(process, options):
+def addTTVIDs(process, options):
     from PhysicsTools.NanoAOD.electrons_cff import isoForEle, ptRatioRelForEle, slimmedElectronsWithUserData 
 
     if options['is2016']: effAreas = 'RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt'
@@ -39,65 +35,36 @@ def ttvUserFloatsSeq(process, options):
     process.slimmedElectronsWithUserData.userIntFromBools = cms.PSet() # Removed
     process.slimmedElectronsWithUserData.userInts         = cms.PSet() # Removed
 
-    options['ELECTRON_COLL'] = "slimmedElectronsWithUserData"
-    process.userFloatsSeq = cms.Sequence(
+    process.ttv_sequence = cms.Sequence(
       process.isoForEle +
       process.ptRatioRelForEle + 
       process.slimmedElectronsWithUserData 
     )
-    return process.userFloatsSeq
 
-#
-# Helper to create TTV id's
-#
-def ttvVarHelper(process, options):
     process.ttvEleVarHelper = cms.EDProducer("TTVElectronVariableHelper",
       probes = cms.InputTag("slimmedElectronsWithUserData"),
       mvasGP = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
       mvas   = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
       is2016 = cms.untracked.bool((True if options['is2016'] else False)),
     )
-    return process.ttvEleVarHelper
 
-#
-# Add probes
-#
-def ttvTagProbes(process):
-  pass
-
-
-def temp(process):
-    process.ttv_ele_sequence = cms.Sequence()
-    def getProbes(name):
-      temp = cms.EDProducer("PatElectronSelectorByValueMap",
-        input     = cms.InputTag("goodElectrons"),
-        cut       = cms.string(options['ELECTRON_CUTS']),
-        selection = cms.InputTag('ttvEleVarHelper:pass' + name),
-        id_cut    = cms.bool(True)
-      )
-      setattr(process, 'probes' + name, temp)
-      process.ttv_ele_sequence += temp
-
-    for wp in workingPoints: getProbes(wp)
-
-    # Applies trigger matching (denominators need to be listed here)
-    def getAllProbes(name):
-      temp = process.goodElectronsTagHLT.clone()
-      temp.isAND = cms.bool(False)
-      temp.selection = cms.InputTag('probes' + name)
-      setattr(process, 'goodElectronsProbe' + name, temp)
-      process.ttv_ele_sequence += temp
-
-    referenceWp = ['Feb2018Loose','RFeb2018LeptonMvaL','RFeb2018LeptonMvaM','RFeb2018LeptonMvaT']
-    for wp in referenceWp:
-      getAllProbes(wp)
 
 def getTreeSeqTTV(process):
-    tree_sequence = cms.Sequence()
+    for wp in workingPoints:
+      temp           = process.probeEleCutBasedVeto.clone()
+      temp.selection = cms.InputTag('ttvEleVarHelper:pass' + wp)
+      setattr(process, 'probes' + wp, temp)
+      process.ele_sequence += temp
 
-    def addProducer(name, allProbes, ref, workingPointsForRef):
-      probeEle = process.probeEle.clone()
-      probeEle.inputs = cms.InputTag('goodElectrons' + ref) # this should be like goodElectrons
+    def addProducer(name, ref, workingPointsForRef):
+      goodElectrons           = process.goodElectrons.clone()
+      goodElectrons.isAND     = cms.bool(False)
+      goodElectrons.selection = cms.InputTag('probes' + ref)
+      setattr(process, 'goodElectrons' + ref, goodElectrons)
+      process.tag_sequence += goodElectrons
+
+      probeEle        = process.probeEle.clone()
+      probeEle.inputs = cms.InputTag('goodElectrons' + ref)
       setattr(process, 'probe' + ref, probeEle)
       process.ele_sequence += probeEle
 
@@ -107,21 +74,22 @@ def getTreeSeqTTV(process):
       process.tnpPairs_sequence *= tnpPairing
 
       producer = process.tnpEleIDs.clone()
-#      producer.jetCollection = cms.InputTag("slimmedJets")
-#      producer.jet_pt_cut    = cms.double(30.)
-#      producer.jet_eta_cut   = cms.double(2.5)
-#      producer.match_delta_r = cms.double(0.3)
+      producer.jetCollection = cms.InputTag("slimmedJets")
+      producer.jet_pt_cut    = cms.double(30.)
+      producer.jet_eta_cut   = cms.double(2.5)
+      producer.match_delta_r = cms.double(0.3)
       producer.tagProbePairs = cms.InputTag('tnpPairing' + ref)
       producer.allProbes     = cms.InputTag('probe' + ref)
       producer.flags         = cms.PSet()
-      for wp in workingPointsForRef: setattr(producer.flags, 'passing' + wp, cms.InputTag('probe' + wp))
+      for wp in workingPointsForRef: setattr(producer.flags, 'passing' + wp, cms.InputTag('probes' + wp))
 
       setattr(process, name, producer)
-      tree_sequence *= producer
+      return producer
 
-    addProducer('EleToId',                        'Ele',                ['Feb2018Loose'])
-    addProducer('Feb2018LooseToLeptonMva',        'Feb2018Loose',       ['Feb2018LeptonMvaL','Feb2018LeptonMvaM','Feb2018LeptonMvaT'])
-    addProducer('Feb2018LeptonMvaLToTightCharge', 'RFeb2018LeptonMvaL', ['TightCharge'])
-    addProducer('Feb2018LeptonMvaMToTightCharge', 'RFeb2018LeptonMvaM', ['TightCharge'])
-    addProducer('Feb2018LeptonMvaTToTightCharge', 'RFeb2018LeptonMvaT', ['TightCharge'])
-    return tree_sequence
+    treeSeq = cms.Sequence()
+    treeSeq *= addProducer('EleToId',                    'Ele',            ['TTVLoose'])
+    treeSeq *= addProducer('TTVLooseToLeptonMva',        'TTVLoose',       ['TTVLeptonMvaL','TTVLeptonMvaM','TTVLeptonMvaT'])
+    treeSeq *= addProducer('TTVLeptonMvaLToTightCharge', 'RTTVLeptonMvaL', ['TightCharge'])
+    treeSeq *= addProducer('TTVLeptonMvaMToTightCharge', 'RTTVLeptonMvaM', ['TightCharge'])
+    treeSeq *= addProducer('TTVLeptonMvaTToTightCharge', 'RTTVLeptonMvaT', ['TightCharge'])
+    return treeSeq

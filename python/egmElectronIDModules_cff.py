@@ -20,7 +20,7 @@ def setIDs(process, options):
     my_id_modules = [
         'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
         'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
+        'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
         'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Fall17_94X_V1_cff',
         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V1_cff',
         'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V1_cff',
@@ -139,19 +139,3 @@ def setIDs(process, options):
             process.susy_ele_sequence += temp
 
         for wp in workingPoints: getProbes(wp)
-
-    if options['addTTV'] :
-
-        from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff  import workingPoints
-
-        process.ttv_ele_sequence = cms.Sequence()
-
-        def getProbes(name):
-            temp = process.probeEleCutBasedVeto.clone()
-            temp.selection = cms.InputTag('ttvEleVarHelper:pass' + wp)
-            setattr(process, 'probes' + name, temp)
-            process.ttv_ele_sequence += temp
-
-        for wp in workingPoints: getProbes(wp)
-
-
