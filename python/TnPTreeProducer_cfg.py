@@ -175,8 +175,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, options['GLOBALTAG'] , '')
 import EgammaAnalysis.TnPTreeProducer.egmTreesSetup_cff as tnpSetup
 tnpSetup.setupTreeMaker(process,options)
 
-
-
 ###################################################################
 ## Init and Load
 ###################################################################
@@ -201,7 +199,7 @@ if options['DoPhoID']   : print "  -- Producing photon SF tree      -- "
 ###################################################################
 process.cand_sequence = cms.Sequence( process.init_sequence + process.tag_sequence )
 if options['addSUSY']                         : process.cand_sequence += process.susy_ele_sequence
-if options['addTTV']                          : process.cand_sequence += process.ttv_ele_sequence
+#if options['addTTV']                          : process.cand_sequence += process.ttv_ele_sequence
 if options['DoEleID'] or options['DoTrigger'] : process.cand_sequence += process.ele_sequence
 if options['DoPhoID']                         : process.cand_sequence += process.pho_sequence
 if options['DoTrigger']                       : process.cand_sequence += process.hlt_sequence
@@ -300,8 +298,6 @@ if not options['useAOD'] :
     setattr( process.tnpEleTrig.flags, 'passingHLTsafe', cms.InputTag("probeEleHLTsafe" ) )
     setattr( process.tnpEleIDs.flags , 'passingHLTsafe', cms.InputTag("probeEleHLTsafe" ) )
 
-def addFlag(name):
-    setattr( process.tnpEleIDs.flags, 'passing'+name, cms.InputTag('probes'+name ) )
 
 # Add SUSY variables to the "variables", add SUSY IDs to the "flags"
 if options['addSUSY'] :
@@ -311,26 +307,24 @@ if options['addSUSY'] :
     setattr( process.tnpEleIDs.variables , 'el_ptRel', cms.string("userFloat('ptRel')") )
     setattr( process.tnpEleIDs.variables , 'el_MVATTH', cms.InputTag("electronMVATTH") )   
     setattr( process.tnpEleIDs.variables , 'el_sip3d', cms.InputTag("susyEleVarHelper:sip3d") )
+
+    def addFlag(name):
+        setattr( process.tnpEleIDs.flags, 'passing'+name, cms.InputTag('probes'+name ) )
     from EgammaAnalysis.TnPTreeProducer.electronsExtrasSUSY_cff  import workingPoints
     for wp in workingPoints: addFlag(wp)
-
-if options['addTTV'] :
-    from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff  import workingPoints
-    for wp in workingPoints: addFlag(wp)
-
-
 
 tnpSetup.customize( process.tnpEleTrig , options )
 tnpSetup.customize( process.tnpEleIDs  , options )
 tnpSetup.customize( process.tnpPhoIDs  , options )
 tnpSetup.customize( process.tnpEleReco , options )
 
-
+from electronsExtrasTTV_cff import getTreeSeqTTV
 process.tree_sequence = cms.Sequence()
 if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
 if (options['DoEleID'])  : process.tree_sequence *= process.tnpEleIDs
 if (options['DoPhoID'])  : process.tree_sequence *= process.tnpPhoIDs
+if (options['addTTV'])   : process.tree_sequence  = getTreeSeqTTV(process)
 
 
 ##########################################################################
