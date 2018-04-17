@@ -90,10 +90,13 @@ private:
   edm::EDGetTokenT<std::vector<pat::Electron>> probesToken_;
   edm::EDGetTokenT<edm::View<reco::Candidate>> probesViewToken_;
   edm::EDGetTokenT<edm::ValueMap<float>> mvaToken_;
-  edm::EDGetTokenT<edm::ValueMap<float>> dxyToken_;
-  edm::EDGetTokenT<edm::ValueMap<float>> dzToken_;
-  edm::EDGetTokenT<edm::ValueMap<float>> leptonMvaToken_;
+  edm::EDGetTokenT<edm::ValueMap<float>> mvaGPToken_;
   edm::EDGetTokenT<double> rhoToken_;
+
+  bool is2016;
+
+  float pt, eta, trackMult, miniIsoCharged, miniIsoNeutral, ptRel, ptRatio, relIso, deepCSV, sip3d, dxyLog, dzLog, eleMva;
+  TMVA::Reader *reader;
 
   std::vector<TString> workingPoints;
 };
@@ -102,9 +105,8 @@ TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & i
   probesToken_(        consumes<std::vector<pat::Electron>>(iConfig.getParameter<edm::InputTag>("probes"))),
   probesViewToken_(    consumes<edm::View<reco::Candidate>>(iConfig.getParameter<edm::InputTag>("probes"))),
   mvaToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvas"))),
-  dxyToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dxy"))),
-  dzToken_(            consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dz"))),
-  leptonMvaToken_(     consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("leptonMvas"))){
+  mvaGPToken_(         consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvasGP"))),
+  is2016(                                                   iConfig.getUntrackedParameter<bool>("is2016")){
 
     workingPoints = {"TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTTVLeptonMvaL","RTTVLeptonMvaM","RTTVLeptonMvaT","TightCharge"};
     for(TString wp : workingPoints) produces<edm::ValueMap<bool>>(("pass" + wp).Data());
@@ -112,7 +114,27 @@ TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & i
 
 TTVElectronVariableHelper::~TTVElectronVariableHelper(){}
 
-void TTVElectronVariableHelper::beginJob(){}
+void TTVElectronVariableHelper::beginJob(){
+  reader  = new TMVA::Reader( "!Color:!Silent" );
+
+  TString eleMvaName = is2016 ? "electronMva" : "electronMvaFall17NoIso";
+  reader->AddVariable( "pt",                  &pt);
+  reader->AddVariable( "eta",                 &eta);
+  reader->AddVariable( "trackMultClosestJet", &trackMult);
+  reader->AddVariable( "miniIsoCharged",      &miniIsoCharged);
+  reader->AddVariable( "miniIsoNeutral",      &miniIsoNeutral);
+  reader->AddVariable( "pTRel",               &ptRel);
+  reader->AddVariable( "ptRatio",             &ptRatio);
+  reader->AddVariable( "relIso",              &relIso);
+  reader->AddVariable( "deepCsvClosestJet",   &deepCSV);
+  reader->AddVariable( "sip3d",               &sip3d);
+  reader->AddVariable( "dxy",                 &dxyLog);
+  reader->AddVariable( "dz",                  &dzLog);
+  reader->AddVariable( eleMvaName,            &eleMva);
+
+  edm::FileInPath *fip = new edm::FileInPath(TString("PhysicsTools/NanoAOD/data/el_BDTG_TTV_") + (is2016 ? "2016" : "2017") + ".weights.xml");
+  reader->BookMVA("BDTG method", fip->fullPath().c_str());
+}
 
 // Combine workingpoints
 bool TTVElectronVariableHelper::combine(std::map<TString, std::vector<bool>>& passWorkingPoints, std::vector<TString> wps){
@@ -125,9 +147,7 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   edm::Handle<std::vector<pat::Electron>> probes;      iEvent.getByToken(probesToken_,         probes);
   edm::Handle<edm::View<reco::Candidate>> probes_view; iEvent.getByToken(probesViewToken_,     probes_view);
   edm::Handle<edm::ValueMap<float>> mvas;              iEvent.getByToken(mvaToken_,            mvas);
-  edm::Handle<edm::ValueMap<float>> dxys;              iEvent.getByToken(dxyToken_,            dxys);
-  edm::Handle<edm::ValueMap<float>> dzs;               iEvent.getByToken(dzToken_,             dzs);
-  edm::Handle<edm::ValueMap<float>> leptonMvas;        iEvent.getByToken(leptonMvaToken_,      leptonMvas);
+  edm::Handle<edm::ValueMap<float>> mvasGP;            iEvent.getByToken(mvaGPToken_,          mvasGP);
 
   std::map<TString, std::vector<bool>> passWorkingPoints;
   for(TString wp : workingPoints) passWorkingPoints[wp] = std::vector<bool>();
@@ -136,21 +156,32 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   for(const auto &probe: *probes){
     edm::RefToBase<reco::Candidate> pp = probes_view->refAt(i);
 
-    float ip3d             = probe.dB(pat::Electron::PV3D);
-    float ip3d_err         = probe.edB(pat::Electron::PV3D);
-    float sip3d            = ip3d/ip3d_err;
-    float mva              = (*mvas)[pp];
-    float dxy              = (*dxys)[pp];
-    float dz               = (*dzs)[pp];
+    float dxy      = fabs(probe.dB(pat::Electron::PV2D));
+    float dz       = fabs(probe.dB(pat::Electron::PVDZ));
+
+    pt             = pp->pt();
+    eta            = fabs(pp->eta());
+    trackMult      = probe.userFloat("jetNDauChargedMVASel");
+    miniIsoCharged = probe.userFloat("miniIsoChg")/pt;
+    miniIsoNeutral = (probe.userFloat("miniIsoAll")-probe.userFloat("miniIsoChg"))/pt;
+    relIso         = probe.userFloat("PFIsoAll")/pt;
+    ptRel          = probe.userFloat("ptRel");
+    ptRatio        = TMath::Min(probe.userFloat("ptRatio"),(float)1.5);
+    deepCSV        = std::max((std::isnan(probe.userFloat("closestJetDeepCsv")) ? 0. : probe.userFloat("closestJetDeepCsv")), 0.);
+    sip3d          = fabs(probe.dB(pat::Electron::PV3D)/probe.edB(pat::Electron::PV3D));
+    dxyLog         = log(dxy);
+    dzLog          = log(dz);
+    eleMva         = (*mvas)[pp];
+
+    float leptonMva        = reader->EvaluateMVA("BDTG method");
     float mini_iso         = probe.userFloat("miniIsoAll")/probe.pt();
-    int   missingInnerHits   = probe.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
-    float leptonMva        = (*leptonMvas)[pp];
+    int   missingInnerHits = probe.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
 
     passWorkingPoints["ConvVeto"].push_back(      probe.passConversionVeto());
     passWorkingPoints["Charge"].push_back(        probe.isGsfCtfScPixChargeConsistent());
     passWorkingPoints["IHit0"].push_back(         missingInnerHits == 0);
 
-    bool TTHLoose = PassTTHLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits, mva);
+    bool TTHLoose = PassTTHLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits, (*mvasGP)[pp]);
     passWorkingPoints["TTVLoose"].push_back(      TTHLoose);
     passWorkingPoints["TTVLeptonMvaL"].push_back( PassLeptonMva("L", leptonMva));
     passWorkingPoints["TTVLeptonMvaM"].push_back( PassLeptonMva("M", leptonMva));
