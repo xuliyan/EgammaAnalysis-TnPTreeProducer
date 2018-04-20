@@ -7,10 +7,40 @@ workingPoints = ["TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTT
 # Sequence to add userfloats
 #
 def addTTVIDs(process, options):
+    process.ttv_sequence = cms.Sequence()
+    #
+    # Need deepCSV in 2016
+    #
+    if(options['is2016']):
+      process.load('JetMETCorrections.Configuration.JetCorrectors_cff')
+      process.load('Configuration.StandardSequences.MagneticField_cff')  # needed for pfImpactParameterTagInfos
+      if(options['isMC']): jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute']
+      else:                jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']
+
+      from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+      updateJetCollection(
+         process,
+         jetSource = cms.InputTag('slimmedJets'),
+         labelName = 'DeepCSV',
+         jetCorrections = ('AK4PFchs', cms.vstring(jetCorrectorLevels), 'None'),
+         # DeepCSV twiki: https://twiki.cern.ch/twiki/bin/view/CMS/DeepFlavour
+         btagDiscriminators = [
+           'pfCombinedSecondaryVertexV2BJetTags',
+           'pfDeepCSVJetTags:probudsg',
+           'pfDeepCSVJetTags:probb',
+           'pfDeepCSVJetTags:probc',
+           'pfDeepCSVJetTags:probbb',
+          #'pfDeepCSVJetTags:probcc', # not available in CMSSW_9_X_Y, also not really needed for us
+         ]
+      )
+
+      process.ttv_sequence += cms.Sequence(process.patAlgosToolsTask)
+
+
     from PhysicsTools.NanoAOD.electrons_cff import isoForEle, ptRatioRelForEle, slimmedElectronsWithUserData 
 
-    if options['is2016']: effAreas = 'RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt'
-    else:                 effAreas = 'RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_92X.txt'
+    if(options['is2016']): effAreas = 'RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt'
+    else:                  effAreas = 'RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_92X.txt'
 
     process.isoForEle                = isoForEle
     process.isoForEle.rho_MiniIso    = cms.InputTag("fixedGridRhoFastjetAll")
@@ -18,7 +48,9 @@ def addTTVIDs(process, options):
     process.isoForEle.EAFile_PFIso   = cms.FileInPath(effAreas)
 
     process.ptRatioRelForEle             = ptRatioRelForEle
+    process.ptRatioRelForEle.srcJet      = cms.InputTag('selectedUpdatedPatJetsDeepCSV' if (options['is2016']) else 'slimmedJets')
     process.slimmedElectronsWithUserData = slimmedElectronsWithUserData
+
 
     # Make a new electron collection, with additional variables that are used for the LeptonMVA below
     process.slimmedElectronsWithUserData.src = cms.InputTag(options['ELECTRON_COLL'])
@@ -35,7 +67,7 @@ def addTTVIDs(process, options):
     process.slimmedElectronsWithUserData.userIntFromBools = cms.PSet() # Removed
     process.slimmedElectronsWithUserData.userInts         = cms.PSet() # Removed
 
-    process.ttv_sequence = cms.Sequence(
+    process.ttv_sequence += cms.Sequence(
       process.isoForEle +
       process.ptRatioRelForEle + 
       process.slimmedElectronsWithUserData 
