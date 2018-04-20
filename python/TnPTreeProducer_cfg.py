@@ -58,6 +58,14 @@ varOptions.register(
     "switch to run other AOD (for RECO SFs)"
     )
 
+varOptions.register(
+    "is2016", False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "switch to run 2016 (for RECO SFs)"
+    )
+
+#
 #### HLTname is HLT2 in reHLT samples
 varOptions.register(
     "HLTname", "HLT",
@@ -101,7 +109,7 @@ options['SUPERCLUSTER_CUTS']    = "abs(eta)<2.5 &&  et>5.0"
 options['PHOTON_CUTS']          = "(abs(-log(tan(superCluster.position.theta/2)))<=2.5) && pt> 10"
 options['ELECTRON_TAG_CUTS']    = "(abs(-log(tan(superCluster.position.theta/2)))<=2.1) && !(1.4442<=abs(-log(tan(superClusterPosition.theta/2)))<=1.566) && pt >= 30.0"
 
-options['MAXEVENTS']            = cms.untracked.int32(2000)
+options['MAXEVENTS']            = cms.untracked.int32(100)
 options['DoTrigger']            = cms.bool( varOptions.doTrigger )
 options['DoRECO']               = cms.bool( varOptions.doRECO    )
 options['DoEleID']              = cms.bool( varOptions.doEleID   )
@@ -114,7 +122,7 @@ options['UseCalibEn']           = varOptions.calibEn
 
 options['addSUSY']              = cms.bool(False)
 options['addTTV']               = cms.bool(True)
-options['is2016']               = cms.bool(False)
+options['is2016']               = cms.bool(varOptions.is2016)
 if options['useAOD']: 
     options['addSUSY']               = cms.bool(False)
     options['addTTV']                = cms.bool(False)
@@ -122,26 +130,16 @@ if options['useAOD']:
 if (varOptions.isMC):
     options['isMC']                = cms.bool(True)
     options['OUTPUT_FILE_NAME']    = "TnPTree_mc.root"
-    if varOptions.isAOD :  options['OUTPUT_FILE_NAME']    = "TnPTree_mc_aod.root"
-#    options['TnPPATHS']            = cms.vstring("HLT*")
-#    options['TnPHLTTagFilters']    = cms.vstring()
-#    options['TnPHLTProbeFilters']  = cms.vstring()
-#    options['HLTFILTERTOMEASURE']  = cms.vstring("")
-#    options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*") #FOR 2016
-#    options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-#     options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter") #FOR 2016
-    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
-    options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
-    options['TnPHLTProbeFilters']  = cms.vstring()
-    options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['GLOBALTAG']           = 'auto:run2_mc'
+    if varOptions.isAOD :  options['OUTPUT_FILE_NAME']    = "TnPTree_mc_aod.root"
 else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
-    options['TnPPATHS']            = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
-    options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
-    options['TnPHLTProbeFilters']  = cms.vstring()
-    options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['GLOBALTAG']           = 'auto:run2_data'
+
+options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*" if (options['is2016']) else "HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
+options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter" if (options['is2016']) else "hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
+options['TnPHLTProbeFilters']  = cms.vstring()
+options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter" if (options['is2016']) else "hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
 
 if varOptions.GT != "auto" :
     options['GLOBALTAG'] = varOptions.GT
@@ -150,7 +148,10 @@ if varOptions.GT != "auto" :
 ###################################################################
 ## Define input files for test local run
 ###################################################################
-from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2017 as inputs
+if options['is2016']:
+  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_23Sep2016 as inputs
+else:
+  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2017 as inputs
 if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_23Sep2016 as inputs #switch to 2017 samples if want to cmsRun on AOD
     
 options['INPUT_FILE_NAME'] = inputs['data']
@@ -318,7 +319,7 @@ tnpSetup.customize( process.tnpEleIDs  , options )
 tnpSetup.customize( process.tnpPhoIDs  , options )
 tnpSetup.customize( process.tnpEleReco , options )
 
-from electronsExtrasTTV_cff import getTreeSeqTTV
+from EgammaAnalysis.TnPTreeProducer.electronsExtrasTTV_cff import getTreeSeqTTV
 process.tree_sequence = cms.Sequence()
 if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
