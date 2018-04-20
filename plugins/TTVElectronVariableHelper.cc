@@ -89,6 +89,8 @@ public:
 private:
   edm::EDGetTokenT<std::vector<pat::Electron>> probesToken_;
   edm::EDGetTokenT<edm::View<reco::Candidate>> probesViewToken_;
+  edm::EDGetTokenT<edm::ValueMap<float>> dxyToken_;
+  edm::EDGetTokenT<edm::ValueMap<float>> dzToken_;
   edm::EDGetTokenT<edm::ValueMap<float>> mvaToken_;
   edm::EDGetTokenT<edm::ValueMap<float>> mvaGPToken_;
   edm::EDGetTokenT<double> rhoToken_;
@@ -104,6 +106,8 @@ private:
 TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & iConfig) :
   probesToken_(        consumes<std::vector<pat::Electron>>(iConfig.getParameter<edm::InputTag>("probes"))),
   probesViewToken_(    consumes<edm::View<reco::Candidate>>(iConfig.getParameter<edm::InputTag>("probes"))),
+  dxyToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dxy"))),
+  dzToken_(            consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dz"))),
   mvaToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvas"))),
   mvaGPToken_(         consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvasGP"))),
   is2016(                                                   iConfig.getUntrackedParameter<bool>("is2016")){
@@ -146,6 +150,8 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   // read input
   edm::Handle<std::vector<pat::Electron>> probes;      iEvent.getByToken(probesToken_,         probes);
   edm::Handle<edm::View<reco::Candidate>> probes_view; iEvent.getByToken(probesViewToken_,     probes_view);
+  edm::Handle<edm::ValueMap<float>> dxys;              iEvent.getByToken(dxyToken_,            dxys);
+  edm::Handle<edm::ValueMap<float>> dzs;               iEvent.getByToken(dzToken_,             dzs);
   edm::Handle<edm::ValueMap<float>> mvas;              iEvent.getByToken(mvaToken_,            mvas);
   edm::Handle<edm::ValueMap<float>> mvasGP;            iEvent.getByToken(mvaGPToken_,          mvasGP);
 
@@ -156,8 +162,8 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   for(const auto &probe: *probes){
     edm::RefToBase<reco::Candidate> pp = probes_view->refAt(i);
 
-    float dxy      = fabs(probe.dB(pat::Electron::PV2D));
-    float dz       = fabs(probe.dB(pat::Electron::PVDZ));
+    float dxy      = (*dxys)[pp];
+    float dz       = (*dzs)[pp];
     pt             = pp->pt();
     eta            = fabs(pp->eta());
     trackMult      = probe.userFloat("jetNDauChargedMVASel");

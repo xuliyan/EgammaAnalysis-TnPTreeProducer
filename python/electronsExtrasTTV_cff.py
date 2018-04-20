@@ -75,6 +75,8 @@ def addTTVIDs(process, options):
 
     process.ttvEleVarHelper = cms.EDProducer("TTVElectronVariableHelper",
       probes = cms.InputTag("slimmedElectronsWithUserData"),
+      dxy    = cms.InputTag("eleVarHelper:dxy"),
+      dz     = cms.InputTag("eleVarHelper:dz"),
       mvasGP = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
       mvas   = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
       is2016 = cms.untracked.bool((True if options['is2016'] else False)),
