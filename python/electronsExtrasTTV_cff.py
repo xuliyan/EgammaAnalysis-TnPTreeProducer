@@ -8,33 +8,39 @@ workingPoints = ["TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTT
 #
 def addTTVIDs(process, options):
     process.ttv_sequence = cms.Sequence()
-    #
-    # Need deepCSV in 2016
-    #
-    if(options['is2016']):
-      process.load('JetMETCorrections.Configuration.JetCorrectors_cff')
-      process.load('Configuration.StandardSequences.MagneticField_cff')  # needed for pfImpactParameterTagInfos
-      if(options['isMC']): jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute']
-      else:                jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']
 
-      from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+    #
+    # Need deepCSV in 2016 and updated JEC in 2017
+    #
+    process.load('JetMETCorrections.Configuration.JetCorrectors_cff')
+    process.load('Configuration.StandardSequences.MagneticField_cff')  # needed for pfImpactParameterTagInfos
+    if(options['isMC']): jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute']
+    else:                jetCorrectorLevels = ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual']
+
+    from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+    if(options['is2016']):
       updateJetCollection(
          process,
          jetSource = cms.InputTag('slimmedJets'),
-         labelName = 'DeepCSV',
+         labelName = 'Updated',
          jetCorrections = ('AK4PFchs', cms.vstring(jetCorrectorLevels), 'None'),
-         # DeepCSV twiki: https://twiki.cern.ch/twiki/bin/view/CMS/DeepFlavour
          btagDiscriminators = [
            'pfCombinedSecondaryVertexV2BJetTags',
            'pfDeepCSVJetTags:probudsg',
            'pfDeepCSVJetTags:probb',
            'pfDeepCSVJetTags:probc',
            'pfDeepCSVJetTags:probbb',
-          #'pfDeepCSVJetTags:probcc', # not available in CMSSW_9_X_Y, also not really needed for us
          ]
       )
+    else:
+      updateJetCollection(
+         process,
+         jetSource = cms.InputTag('slimmedJets'),
+         labelName = 'Updated',
+         jetCorrections = ('AK4PFchs', cms.vstring(jetCorrectorLevels), 'None')
+      )
 
-      process.ttv_sequence += cms.Sequence(process.patAlgosToolsTask)
+    process.ttv_sequence += cms.Sequence(process.patAlgosToolsTask)
 
 
     from PhysicsTools.NanoAOD.electrons_cff import isoForEle, ptRatioRelForEle, slimmedElectronsWithUserData 
@@ -48,7 +54,7 @@ def addTTVIDs(process, options):
     process.isoForEle.EAFile_PFIso   = cms.FileInPath(effAreas)
 
     process.ptRatioRelForEle             = ptRatioRelForEle
-    process.ptRatioRelForEle.srcJet      = cms.InputTag('selectedUpdatedPatJetsDeepCSV' if (options['is2016']) else 'slimmedJets')
+    process.ptRatioRelForEle.srcJet      = cms.InputTag('selectedUpdatedPatJetsUpdated')
     process.slimmedElectronsWithUserData = slimmedElectronsWithUserData
 
 
@@ -77,8 +83,7 @@ def addTTVIDs(process, options):
       probes = cms.InputTag("slimmedElectronsWithUserData"),
       dxy    = cms.InputTag("eleVarHelper:dxy"),
       dz     = cms.InputTag("eleVarHelper:dz"),
-      mvasGP = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
-      mvas   = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
+      mvas   = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values" if options["is2016"] else "electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
       is2016 = cms.untracked.bool((True if options['is2016'] else False)),
     )
 

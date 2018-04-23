@@ -109,7 +109,7 @@ options['SUPERCLUSTER_CUTS']    = "abs(eta)<2.5 &&  et>5.0"
 options['PHOTON_CUTS']          = "(abs(-log(tan(superCluster.position.theta/2)))<=2.5) && pt> 10"
 options['ELECTRON_TAG_CUTS']    = "(abs(-log(tan(superCluster.position.theta/2)))<=2.1) && !(1.4442<=abs(-log(tan(superClusterPosition.theta/2)))<=1.566) && pt >= 30.0"
 
-options['MAXEVENTS']            = cms.untracked.int32(100)
+options['MAXEVENTS']            = cms.untracked.int32(1000)
 options['DoTrigger']            = cms.bool( varOptions.doTrigger )
 options['DoRECO']               = cms.bool( varOptions.doRECO    )
 options['DoEleID']              = cms.bool( varOptions.doEleID   )
@@ -130,11 +130,11 @@ if options['useAOD']:
 if (varOptions.isMC):
     options['isMC']                = cms.bool(True)
     options['OUTPUT_FILE_NAME']    = "TnPTree_mc.root"
-    options['GLOBALTAG']           = 'auto:run2_mc'
+    options['GLOBALTAG']           = '80X_mcRun2_asymptotic_2016_TrancheIV_v8' if options['is2016'] else '94X_mc2017_realistic_v13'
     if varOptions.isAOD :  options['OUTPUT_FILE_NAME']    = "TnPTree_mc_aod.root"
 else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
-    options['GLOBALTAG']           = 'auto:run2_data'
+    options['GLOBALTAG']           = '80X_dataRun2_2016SeptRepro_v7' if options['is2016'] else '94X_dataRun2_v6'
 
 options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*" if (options['is2016']) else "HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
 options['TnPHLTTagFilters']    = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter" if (options['is2016']) else "hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")

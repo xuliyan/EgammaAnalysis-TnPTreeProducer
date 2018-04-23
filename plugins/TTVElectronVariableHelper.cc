@@ -33,18 +33,6 @@ namespace{
       iEvent.put(std::move(valMap), name);
   }
 
-  float slidingCut(float pt, float low, float high){
-    float slope = (high - low)/10.;
-    return std::min(low, std::max(high, low + slope*(pt-15)));
-  }
-
-  bool PassMVAVLoose(double pt, double mva, double abssceta){
-    if(abssceta<0.8)        return mva > (pt < 10 ?  0.46 : slidingCut(pt, -0.48, -0.85));
-    else if(abssceta<1.479) return mva > (pt < 10 ? -0.03 : slidingCut(pt, -0.67, -0.91));
-    else if(abssceta<2.5)   return mva > (pt < 10 ?  0.06 : slidingCut(pt, -0.49, -0.83));
-    else                    return false;
-  }
-
   bool PassIDEmuDoubleEG(const pat::Electron &ele){
     float eInvMinusPInv = (1.0 - ele.eSuperClusterOverP())/ele.ecalEnergy();
     if(ele.full5x5_sigmaIetaIeta()                    >= (ele.isEB() ? 0.011 : 0.030)) return false;
@@ -56,14 +44,13 @@ namespace{
     return true;
   }
 
-  // Because CMS wouldn't be CMS if some people want to make it really complicated, can't understand how this kind of selections get through approval
-  bool PassTTHLoose(const pat::Electron &ele, float dxy, float dz, float sip3d, double miniIso, int missingHits, double mva){
+  bool PassTTHLoose(const pat::Electron &ele, float dxy, float dz, float sip3d, double miniIso, int missingHits){
     if(!PassIDEmuDoubleEG(ele))                       return false;
     if(std::abs(dxy) > 0.05)                          return false;
     if(std::abs(dz) > 0.1)                            return false;
     if(std::abs(sip3d) > 8)                           return false;
     if(miniIso > 0.4)                                 return false;
-    if(!PassMVAVLoose(ele.pt(), mva, abs(ele.eta()))) return false;
+    if(missingHits > 1)                               return false;
     return true;
   }
 
@@ -109,7 +96,6 @@ TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & i
   dxyToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dxy"))),
   dzToken_(            consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("dz"))),
   mvaToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvas"))),
-  mvaGPToken_(         consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvasGP"))),
   is2016(                                                   iConfig.getUntrackedParameter<bool>("is2016")){
 
     workingPoints = {"TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTTVLeptonMvaL","RTTVLeptonMvaM","RTTVLeptonMvaT","TightCharge"};
@@ -153,7 +139,6 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   edm::Handle<edm::ValueMap<float>> dxys;              iEvent.getByToken(dxyToken_,            dxys);
   edm::Handle<edm::ValueMap<float>> dzs;               iEvent.getByToken(dzToken_,             dzs);
   edm::Handle<edm::ValueMap<float>> mvas;              iEvent.getByToken(mvaToken_,            mvas);
-  edm::Handle<edm::ValueMap<float>> mvasGP;            iEvent.getByToken(mvaGPToken_,          mvasGP);
 
   std::map<TString, std::vector<bool>> passWorkingPoints;
   for(TString wp : workingPoints) passWorkingPoints[wp] = std::vector<bool>();
@@ -162,8 +147,8 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
   for(const auto &probe: *probes){
     edm::RefToBase<reco::Candidate> pp = probes_view->refAt(i);
 
-    float dxy      = (*dxys)[pp];
-    float dz       = (*dzs)[pp];
+    float dxy      = fabs((*dxys)[pp]);
+    float dz       = fabs((*dzs)[pp]);
     pt             = pp->pt();
     eta            = fabs(pp->eta());
     trackMult      = probe.userFloat("jetNDauChargedMVASel");
@@ -182,11 +167,12 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
     float mini_iso         = probe.userFloat("miniIsoAll")/probe.pt();
     int   missingInnerHits = probe.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
 
+   // std::cout << pt << "\t" << eta << "\t" << trackMult << "\t" << miniIsoCharged << "\t" << miniIsoNeutral << "\t" << ptRel << "\t" << ptRatio << "\t" << deepCSV << "\t" << sip3d << "\t" << dxyLog << "\t" << dzLog << "\t" << relIso << "\t" << eleMva << "\t" << leptonMva << std::endl;
     passWorkingPoints["ConvVeto"].push_back(      probe.passConversionVeto());
     passWorkingPoints["Charge"].push_back(        probe.isGsfCtfScPixChargeConsistent());
     passWorkingPoints["IHit0"].push_back(         missingInnerHits == 0);
 
-    bool TTHLoose = PassTTHLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits, (*mvasGP)[pp]);
+    bool TTHLoose = PassTTHLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits);
     passWorkingPoints["TTVLoose"].push_back(      TTHLoose);
     passWorkingPoints["TTVLeptonMvaL"].push_back( PassLeptonMva("L", leptonMva));
     passWorkingPoints["TTVLeptonMvaM"].push_back( PassLeptonMva("M", leptonMva));
