@@ -80,7 +80,7 @@ void PileupWeightProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
     //    std::cout<<nPUtrue<<std::endl;
     if(nPUtrue<0) nPUtrue=0;
     //    *pileupWeight = pileupWeights_[nPUtrue+1]; // NOT 100% sure
-    *pileupWeight = pileupWeights_[nPUtrue]; // most likely better estimate
+    *pileupWeight = (nPUtrue < 99 ? pileupWeights_[nPUtrue] : 0.); // most likely better estimate
   }
   iEvent.put(std::move(pileupWeight), "pileupWeights"); 
 
