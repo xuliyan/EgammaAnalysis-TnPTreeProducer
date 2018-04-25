@@ -224,8 +224,9 @@ def setSequences(process, options):
         process.pho_sequence += process.genProbePho
         process.sc_sequence  += process.genProbeSC
 
-    from EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cfi import pileupProducer
-    process.pileupReweightingProducer = pileupProducer.clone()
+    from EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cfi import pileupProducer2016
+    from EgammaAnalysis.TnPTreeProducer.pileupConfiguration_cfi import pileupProducer2017
+    process.pileupReweightingProducer = (pileupProducer2016.clone() if options['is2016'] else pileupProducer2017.clone())
     if options['useAOD']: process.pileupReweightingProducer.pileupInfoTag = "addPileupInfo"
 
     process.mc_sequence = cms.Sequence()
