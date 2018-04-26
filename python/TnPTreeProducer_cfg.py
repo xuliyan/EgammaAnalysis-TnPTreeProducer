@@ -325,7 +325,7 @@ if (options['DoTrigger']): process.tree_sequence *= process.tnpEleTrig
 if (options['DoRECO'])   : process.tree_sequence *= process.tnpEleReco
 if (options['DoEleID'])  : process.tree_sequence *= process.tnpEleIDs
 if (options['DoPhoID'])  : process.tree_sequence *= process.tnpPhoIDs
-if (options['addTTV'])   : process.tree_sequence  = getTreeSeqTTV(process)
+if (options['addTTV'])   : process.tree_sequence  = getTreeSeqTTV(process,options)
 
 
 ##########################################################################

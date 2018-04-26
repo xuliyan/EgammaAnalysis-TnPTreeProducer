@@ -88,7 +88,7 @@ def addTTVIDs(process, options):
     )
 
 
-def getTreeSeqTTV(process):
+def getTreeSeqTTV(process,options):
     for wp in workingPoints:
       temp           = process.probeEleCutBasedVeto.clone()
       temp.selection = cms.InputTag('ttvEleVarHelper:pass' + wp)
@@ -114,6 +114,7 @@ def getTreeSeqTTV(process):
 
       producer = process.tnpEleIDs.clone()
       producer.jetCollection = cms.InputTag("slimmedJets")
+      producer.is2017        = cms.untracked.bool((False if options['is2016'] else True))
       producer.jet_pt_cut    = cms.double(30.)
       producer.jet_eta_cut   = cms.double(2.5)
       producer.match_delta_r = cms.double(0.3)
