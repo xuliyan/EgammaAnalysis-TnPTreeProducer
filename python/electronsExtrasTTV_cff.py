@@ -116,7 +116,7 @@ def getTreeSeqTTV(process,options):
       producer.jetCollection = cms.InputTag("slimmedJets")
       producer.is2017        = cms.untracked.bool((False if options['is2016'] else True))
       producer.jet_pt_cut    = cms.double(30.)
-      producer.jet_eta_cut   = cms.double(2.5)
+      producer.jet_eta_cut   = cms.double(2.4)
       producer.match_delta_r = cms.double(0.3)
       producer.tagProbePairs = cms.InputTag('tnpPairing' + ref)
       producer.allProbes     = cms.InputTag('probe' + ref)
