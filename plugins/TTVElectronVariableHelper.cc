@@ -44,7 +44,7 @@ namespace{
     return true;
   }
 
-  bool PassTTHLoose(const pat::Electron &ele, float dxy, float dz, float sip3d, double miniIso, int missingHits){
+  bool PassTTVLoose(const pat::Electron &ele, float dxy, float dz, float sip3d, double miniIso, int missingHits){
     if(!PassIDEmuDoubleEG(ele))                       return false;
     if(std::abs(dxy) > 0.05)                          return false;
     if(std::abs(dz) > 0.1)                            return false;
@@ -54,10 +54,12 @@ namespace{
     return true;
   }
 
-  bool PassLeptonMva(TString level, double mva){
-    if(level == "L")  return mva > 0.8;
-    if(level == "M")  return mva > 0.85;
-    if(level == "T")  return mva > 0.9;
+  bool PassLeptonMva(TString level, double mva, double deepCSV, bool is2016){
+    if(deepCSV > (is2016 ? 0.8958 : 0.8001)) return false;
+    if(level == "ttZ4l")  return mva > -0.4;
+    if(level == "ttZ3l")  return mva >  0.4;
+    if(level == "ttW")    return mva >  0.6;
+    if(level == "tZq")    return mva >  0.8;
     return false;
   }
 }
@@ -98,7 +100,7 @@ TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & i
   mvaToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvas"))),
   is2016(                                                   iConfig.getUntrackedParameter<bool>("is2016")){
 
-    workingPoints = {"TTVLoose","TTVLeptonMvaL","TTVLeptonMvaM","TTVLeptonMvaT","RTTVLeptonMvaL","RTTVLeptonMvaM","RTTVLeptonMvaT","TightCharge"};
+    workingPoints = {"TTVLoose","TTVLeptonMvaTTZ3l","TTVLeptonMvaTTZ4l","TTVLeptonMvaTTW","TTVLeptonMvatZq","RTTVLeptonMvaTTZ3l","RTTVLeptonMvaTTZ4l","RTTVLeptonMvaTTW","RTTVLeptonMvatZq","TightCharge"};
     for(TString wp : workingPoints) produces<edm::ValueMap<bool>>(("pass" + wp).Data());
 }
 
@@ -168,19 +170,17 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
     int   missingInnerHits = probe.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
 
    // std::cout << pt << "\t" << eta << "\t" << trackMult << "\t" << miniIsoCharged << "\t" << miniIsoNeutral << "\t" << ptRel << "\t" << ptRatio << "\t" << deepCSV << "\t" << sip3d << "\t" << dxyLog << "\t" << dzLog << "\t" << relIso << "\t" << eleMva << "\t" << leptonMva << std::endl;
-    passWorkingPoints["ConvVeto"].push_back(      probe.passConversionVeto());
-    passWorkingPoints["Charge"].push_back(        probe.isGsfCtfScPixChargeConsistent());
-    passWorkingPoints["IHit0"].push_back(         missingInnerHits == 0);
+    passWorkingPoints["ConvVeto"].push_back(probe.passConversionVeto());
+    passWorkingPoints["Charge"].push_back(probe.isGsfCtfScPixChargeConsistent());
+    passWorkingPoints["IHit0"].push_back(missingInnerHits == 0);
 
-    bool TTHLoose = PassTTHLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits);
-    passWorkingPoints["TTVLoose"].push_back(      TTHLoose);
-    passWorkingPoints["TTVLeptonMvaL"].push_back( PassLeptonMva("L", leptonMva));
-    passWorkingPoints["TTVLeptonMvaM"].push_back( PassLeptonMva("M", leptonMva));
-    passWorkingPoints["TTVLeptonMvaT"].push_back( PassLeptonMva("T", leptonMva));
-    passWorkingPoints["RTTVLeptonMvaL"].push_back(combine(passWorkingPoints, {"TTVLoose", "TTVLeptonMvaL"}));
-    passWorkingPoints["RTTVLeptonMvaM"].push_back(combine(passWorkingPoints, {"TTVLoose", "TTVLeptonMvaM"}));
-    passWorkingPoints["RTTVLeptonMvaT"].push_back(combine(passWorkingPoints, {"TTVLoose", "TTVLeptonMvaT"}));
-    passWorkingPoints["TightCharge"].push_back(   combine(passWorkingPoints, {"Charge", "ConvVeto","IHit0"}));
+    bool TTVLoose = PassTTVLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits);
+    passWorkingPoints["TTVLoose"].push_back(TTVLoose);
+    for(TString i : {"TTZ3l","TTZ4l","TTW","tZq"}){
+      passWorkingPoints["TTVLeptonMva"+i].push_back(PassLeptonMva(i, leptonMva, deepCSV, is2016));
+      passWorkingPoints["RTTVLeptonMva"+i].push_back(combine(passWorkingPoints, {"TTVLoose", "TTVLeptonMva"+i}));
+    }
+    passWorkingPoints["TightCharge"].push_back(combine(passWorkingPoints, {"Charge", "ConvVeto","IHit0"}));
 
 
     ++i;
