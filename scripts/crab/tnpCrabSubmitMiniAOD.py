@@ -9,7 +9,7 @@ shutil.copyfile('../../python/TnPTreeProducer_cfg.py', 'TnPTreeProducer_cfg.py')
 
 config = config()
 
-submitVersion = "Moriond18_v2"
+submitVersion = "Moriond18_v4"
 
 if os.environ["USER"] in ['tomc']:
   mainOutputDir           = os.path.join('/store/user/tomc/tnp/electrons', submitVersion)
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     submit(config, 'DYToLL_madgraph16',   '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/MINIAODSIM')
 
 
-    ##### submit DATA (2017)
+    ##### submit DATA
     config.Data.splitting      = 'LumiBased'
     config.Data.unitsPerJob    = 100
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir,'data2017')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir,'data2016')
     config.Data.lumiMask       = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
-    config.JobType.pyCfgParams = ['isMC=False', 'GT=80X_mcRun2_asymptotic_2016_TrancheIV_v8','is2016=True']
+    config.JobType.pyCfgParams = ['isMC=False', 'GT=80X_dataRun2_2016SeptRepro_v7','is2016=True']
 
     submit(config, 'Run2016B-v2', '/SingleElectron/Run2016B-03Feb2017_ver2-v2/MINIAOD')
     submit(config, 'Run2016C',    '/SingleElectron/Run2016C-03Feb2017-v1/MINIAOD')
