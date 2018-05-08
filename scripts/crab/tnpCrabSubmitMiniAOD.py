@@ -9,7 +9,7 @@ shutil.copyfile('../../python/TnPTreeProducer_cfg.py', 'TnPTreeProducer_cfg.py')
 
 config = config()
 
-submitVersion = "Moriond18_v4"
+submitVersion = "Moriond18_v5"
 
 if os.environ["USER"] in ['tomc']:
   mainOutputDir           = os.path.join('/store/user/tomc/tnp/electrons', submitVersion)

@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 # All workingpoints we need to probe
-workingPoints = ["TTVLoose","TTVLeptonMvaTTZ3l","TTVLeptonMvaTTZ4l","TTVLeptonMvaTTW","TTVLeptonMvatZq","RTTVLeptonMvaTTZ3l","RTTVLeptonMvaTTZ4l","RTTVLeptonMvaTTW","RTTVLeptonMvatZq","TightCharge"]
+workingPoints = ["TTVLoose","TTVLeptonMvattZ3l","TTVLeptonMvattZ4l","TTVLeptonMvattW","TTVLeptonMvatZq","RTTVLeptonMvattZ3l","RTTVLeptonMvattZ4l","RTTVLeptonMvattW","RTTVLeptonMvatZq","TightCharge"]
 
 #
 # Sequence to add userfloats
@@ -128,6 +128,6 @@ def getTreeSeqTTV(process,options):
 
     treeSeq = cms.Sequence()
     treeSeq *= addProducer('EleToId',                      'Ele',              ['TTVLoose'])
-    treeSeq *= addProducer('TTVLooseToLeptonMva',          'TTVLoose',         ['TTVLeptonMvaTTZ3l','TTVLeptonMvaTTZ4l','TTVLeptonMvaTTW','TTVLeptonMvatZq'])
-    treeSeq *= addProducer('TTVLeptonMvaTTWToTightCharge', 'RTTVLeptonMvaTTW', ['TightCharge'])
+    treeSeq *= addProducer('TTVLooseToLeptonMva',          'TTVLoose',         ['TTVLeptonMvattZ3l','TTVLeptonMvattZ4l','TTVLeptonMvattW','TTVLeptonMvatZq'])
+    treeSeq *= addProducer('TTVLeptonMvattWToTightCharge', 'RTTVLeptonMvattW', ['TightCharge'])
     return treeSeq

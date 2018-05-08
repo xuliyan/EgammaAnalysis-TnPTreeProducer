@@ -100,7 +100,7 @@ TTVElectronVariableHelper::TTVElectronVariableHelper(const edm::ParameterSet & i
   mvaToken_(           consumes<edm::ValueMap<float>>(      iConfig.getParameter<edm::InputTag>("mvas"))),
   is2016(                                                   iConfig.getUntrackedParameter<bool>("is2016")){
 
-    workingPoints = {"TTVLoose","TTVLeptonMvaTTZ3l","TTVLeptonMvaTTZ4l","TTVLeptonMvaTTW","TTVLeptonMvatZq","RTTVLeptonMvaTTZ3l","RTTVLeptonMvaTTZ4l","RTTVLeptonMvaTTW","RTTVLeptonMvatZq","TightCharge"};
+    workingPoints = {"TTVLoose","TTVLeptonMvattZ3l","TTVLeptonMvattZ4l","TTVLeptonMvattW","TTVLeptonMvatZq","RTTVLeptonMvattZ3l","RTTVLeptonMvattZ4l","RTTVLeptonMvattW","RTTVLeptonMvatZq","TightCharge"};
     for(TString wp : workingPoints) produces<edm::ValueMap<bool>>(("pass" + wp).Data());
 }
 
@@ -176,7 +176,7 @@ void TTVElectronVariableHelper::produce(edm::Event & iEvent, const edm::EventSet
 
     bool TTVLoose = PassTTVLoose(probe, dxy, dz, sip3d, mini_iso, missingInnerHits);
     passWorkingPoints["TTVLoose"].push_back(TTVLoose);
-    for(TString i : {"TTZ3l","TTZ4l","TTW","tZq"}){
+    for(TString i : {"ttZ3l","ttZ4l","ttW","tZq"}){
       passWorkingPoints["TTVLeptonMva"+i].push_back(PassLeptonMva(i, leptonMva, deepCSV, is2016));
       passWorkingPoints["RTTVLeptonMva"+i].push_back(combine(passWorkingPoints, {"TTVLoose", "TTVLeptonMva"+i}));
     }
