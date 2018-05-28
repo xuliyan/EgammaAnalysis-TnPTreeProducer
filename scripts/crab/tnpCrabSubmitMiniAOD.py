@@ -9,7 +9,7 @@ shutil.copyfile('../../python/TnPTreeProducer_cfg.py', 'TnPTreeProducer_cfg.py')
 
 config = config()
 
-submitVersion = "Moriond18_v5"
+submitVersion = "Moriond18_v6"
 
 if os.environ["USER"] in ['tomc']:
   mainOutputDir           = os.path.join('/store/user/tomc/tnp/electrons', submitVersion)
@@ -85,11 +85,10 @@ if __name__ == '__main__':
     config.Data.lumiMask       = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
     config.JobType.pyCfgParams = ['isMC=False', 'GT=80X_dataRun2_2016SeptRepro_v7','is2016=True']
 
-    submit(config, 'Run2016B-v2', '/SingleElectron/Run2016B-03Feb2017_ver2-v2/MINIAOD')
-    submit(config, 'Run2016C',    '/SingleElectron/Run2016C-03Feb2017-v1/MINIAOD')
-    submit(config, 'Run2016D',    '/SingleElectron/Run2016D-03Feb2017-v1/MINIAOD')
-    submit(config, 'Run2016E',    '/SingleElectron/Run2016E-03Feb2017-v1/MINIAOD')
-    submit(config, 'Run2016F',    '/SingleElectron/Run2016F-03Feb2017-v1/MINIAOD')
-    submit(config, 'Run2016G',    '/SingleElectron/Run2016G-03Feb2017-v1/MINIAOD')
-    submit(config, 'Run2016H-v2', '/SingleElectron/Run2016H-03Feb2017_ver2-v1/MINIAOD')
-    submit(config, 'Run2016H-v3', '/SingleElectron/Run2016H-03Feb2017_ver3-v1/MINIAOD')
+    submit(config, 'Run2016B', '/SingleElectron/Run2016B-07Aug17_ver2-v2/MINIAOD')
+    submit(config, 'Run2016C', '/SingleElectron/Run2016C-07Aug17-v1/MINIAOD')
+    submit(config, 'Run2016D', '/SingleElectron/Run2016D-07Aug17-v1/MINIAOD')
+    submit(config, 'Run2016E', '/SingleElectron/Run2016E-07Aug17-v1/MINIAOD')
+    submit(config, 'Run2016F', '/SingleElectron/Run2016F-07Aug17-v1/MINIAOD')
+    submit(config, 'Run2016G', '/SingleElectron/Run2016G-07Aug17-v1/MINIAOD')
+    submit(config, 'Run2016H', '/SingleElectron/Run2016H-07Aug17v1/MINIAOD')
