@@ -109,7 +109,7 @@ TTVElectronVariableHelper::~TTVElectronVariableHelper(){}
 void TTVElectronVariableHelper::beginJob(){
   reader  = new TMVA::Reader( "!Color:!Silent" );
 
-  TString eleMvaName = is2016 ? "electronMva" : "electronMvaFall17NoIso";
+  TString eleMvaName = is2016 ? "electronMvaSpring16GP" : "electronMvaFall17NoIso";
   reader->AddVariable( "pt",                  &pt);
   reader->AddVariable( "eta",                 &eta);
   reader->AddVariable( "trackMultClosestJet", &trackMult);

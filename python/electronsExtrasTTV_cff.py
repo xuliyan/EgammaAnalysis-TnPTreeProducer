@@ -55,6 +55,8 @@ def addTTVIDs(process, options):
 
     process.ptRatioRelForEle             = ptRatioRelForEle
     process.ptRatioRelForEle.srcJet      = cms.InputTag('selectedUpdatedPatJetsUpdated')
+    process.ptRatioRelForEle.isData      = cms.untracked.bool(not options['isMC'])
+    process.ptRatioRelForEle.is2017      = cms.untracked.bool(not options['is2016'])
     process.slimmedElectronsWithUserData = slimmedElectronsWithUserData
 
 
