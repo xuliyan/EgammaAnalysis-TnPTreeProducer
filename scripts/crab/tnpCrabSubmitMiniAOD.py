@@ -56,10 +56,10 @@ if __name__ == '__main__':
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir,'mc17')
     config.JobType.pyCfgParams = ['isMC=True', 'GT=94X_mc2017_realistic_v13']
 
-    submit(config, 'DYToLL_madgraph',     '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM')
-    submit(config, 'DYToLL_madgraph_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
-    submit(config, 'DYToLL_amcatnlo',     '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM')
-    submit(config, 'DYToLL_amcatnlo_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
+#    submit(config, 'DYToLL_madgraph',     '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10-v1/MINIAODSIM')
+#    submit(config, 'DYToLL_madgraph_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-RECOSIMstep_94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
+#    submit(config, 'DYToLL_amcatnlo',     '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM')
+#    submit(config, 'DYToLL_amcatnlo_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
 
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir, 'mc2016')
     config.JobType.pyCfgParams = ['isMC=True', 'GT=80X_mcRun2_asymptotic_2016_TrancheIV_v8','is2016=True']
@@ -75,15 +75,15 @@ if __name__ == '__main__':
     config.Data.lumiMask       = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/PromptReco/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
     config.JobType.pyCfgParams = ['isMC=False', 'GT=94X_dataRun2_v6']
  
-    submit(config, '17Nov2017_RunB', '/SingleElectron/Run2017B-17Nov2017-v1/MINIAOD')    
-    submit(config, '17Nov2017_RunC', '/SingleElectron/Run2017C-17Nov2017-v1/MINIAOD')    
-    submit(config, '17Nov2017_RunD', '/SingleElectron/Run2017D-17Nov2017-v1/MINIAOD')    
-    submit(config, '17Nov2017_RunE', '/SingleElectron/Run2017E-17Nov2017-v1/MINIAOD')
-    submit(config, '17Nov2017_RunF', '/SingleElectron/Run2017F-17Nov2017-v1/MINIAOD')
+#    submit(config, '17Nov2017_RunB', '/SingleElectron/Run2017B-17Nov2017-v1/MINIAOD')
+#    submit(config, '17Nov2017_RunC', '/SingleElectron/Run2017C-17Nov2017-v1/MINIAOD')
+#    submit(config, '17Nov2017_RunD', '/SingleElectron/Run2017D-17Nov2017-v1/MINIAOD')
+#    submit(config, '17Nov2017_RunE', '/SingleElectron/Run2017E-17Nov2017-v1/MINIAOD')
+#    submit(config, '17Nov2017_RunF', '/SingleElectron/Run2017F-17Nov2017-v1/MINIAOD')
 
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir,'data2016')
     config.Data.lumiMask       = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
-    config.JobType.pyCfgParams = ['isMC=False', 'GT=80X_dataRun2_2016SeptRepro_v7','is2016=True']
+    config.JobType.pyCfgParams = ['isMC=False', 'GT=80X_dataRun2_2016LegacyRepro_v4','is2016=True']
 
     submit(config, 'Run2016B', '/SingleElectron/Run2016B-07Aug17_ver2-v2/MINIAOD')
     submit(config, 'Run2016C', '/SingleElectron/Run2016C-07Aug17-v1/MINIAOD')
