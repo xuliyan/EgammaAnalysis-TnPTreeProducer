@@ -4,7 +4,7 @@ TnP package for EGM
 For regular users
 1. install
 
-git clone -b CMSSW_9_4_X https://github.com/cms-analysis/EgammaAnalysis-TnPTreeProducer.git EgammaAnalysis/TnPTreeProducer
+git clone -b 2018_HLT https://github.com/cms-analysis/EgammaAnalysis-TnPTreeProducer.git EgammaAnalysis/TnPTreeProducer
 
 
 
