@@ -81,7 +81,7 @@ if __name__ == '__main__':
     config.Data.splitting      = 'FileBased'
     config.Data.unitsPerJob    = 8
     config.Data.outLFNDirBase  = os.path.join(mainOutputDir, 'mc')
-    config.JobType.pyCfgParams = ['isMC=True', doEleTree, doPhoTree, doHLTTree, '102X_upgrade2018_realistic_v12']
+    config.JobType.pyCfgParams = ['isMC=True', doEleTree, doPhoTree, doHLTTree, 'GT=102X_upgrade2018_realistic_v12']
 
     config.Data.runRange = ''
     config.Data.lumiMask  = ''
