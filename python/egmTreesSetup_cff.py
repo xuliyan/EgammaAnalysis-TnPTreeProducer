@@ -36,16 +36,56 @@ def setTagsProbes(process, options):
                                         isAND       = cms.bool(True)
                                     )
 
+    process.probeElePassL125seed = cms.EDProducer("PatElectronL1CandProducerV3",
+                                        inputs    = cms.InputTag("probeEleCutBasedTight94XV2"),
+                                        l1Objects = cms.InputTag("caloStage2Digis:EGamma"),
+                                        dRmatch   = cms.double(0.2), # following Sam's sugesstion
+                                        minET     = cms.double(25.)
+                                   )
+
+    process.probeElePassL112seed = process.probeElePassL125seed.clone()
+    process.probeElePassL112seed.minET = cms.double(12.)
+
     ##################### PROBE ELECTRONs ###########################
     process.probeEle             = process.tagEle.clone()
     process.probeEle.filterNames = cms.vstring(options['TnPHLTProbeFilters'])
-    process.probeEle.inputs      = cms.InputTag("goodElectrons")  
+#    process.probeEle.inputs      = cms.InputTag("goodElectrons")
+    process.probeEle.inputs      = cms.InputTag("probeEleCutBasedTight94XV2")  
 
     ################# PROBE ELECTRONs passHLT #######################
     process.probeElePassHLT              = process.tagEle.clone()
     process.probeElePassHLT.inputs       = cms.InputTag("probeEle")  
     process.probeElePassHLT.filterNames  = cms.vstring(options['HLTFILTERTOMEASURE'])
     process.probeElePassHLT.isAND        = cms.bool(False)
+
+    #### Ele32WPTight
+    process.probeElePassL1TEle32WPTight         = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEGL1SingleEGOrFilter"))
+    process.probeElePassL1TEtEle32WPTight       = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEG32L1SingleEGOrEtFilter"))
+    process.probeElePassGsfTrackIsoEle32WPTight = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEle32WPTightGsfTrackIsoFilter"))
+
+    #### Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v
+    process.probeElePassL1T                     = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEGL1SingleAndDoubleEGOrPairFilter"))
+
+    #### Leg1
+    FilterPre = "hltEle23Ele12CaloIdLTrackIdLIsoVL"
+    Leg1Post = "Leg1Filter"
+    EtLeg1Filter = FilterPre + "Et" + Leg1Post
+    TrackIsoLeg1Filter = FilterPre + "TrackIso" + Leg1Post
+
+    process.probeElePassEtLeg1                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg1Filter))
+    process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg1Filter))
+
+    Leg2Post = "Leg2Filter"
+    EtLeg2Filter = FilterPre + "Et" + Leg2Post
+    TrackIsoLeg2Filter = FilterPre + "TrackIso" + Leg2Post
+
+    process.probeElePassEtLeg1                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg2Filter))
+    process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
+
+    #### DoubleEle33
+    process.probeElePassPMS2UnseededFilterDouble33 = process.probeElePassHLT.clone(filterNames = cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"))
+    process.probeElePassPMS2SeededFilterDouble33   = process.probeElePassHLT.clone(filterNames = cms.vstring("hltEle33CaloIdLMWPMS2Filter"))
+
 
     ###################### PROBE PHOTONs ############################
     process.probePho  = cms.EDProducer( gamHLTProducer,
@@ -308,7 +348,20 @@ def setSequences(process, options):
         process.probePho                
         )
 
-    process.hlt_sequence = cms.Sequence( process.probeElePassHLT )
+    process.hlt_sequence = cms.Sequence( process.probeElePassHLT 
+                                         + process.probeElePassL125seed
+                                         + process.probeElePassL112seed
+                                         + process.probeElePassL1T
+                                         + process.probeElePassEtLeg1
+                                         + process.probeElePassTrackIsoLeg1
+                                         + process.probeElePassEtLeg2
+                                         + process.probeElePassTrackIsoLeg2
+                                         + process.probeElePassPMS2SeededFilterDouble33
+                                         + process.probeElePassPMS2UnseededFilterDouble33
+                                         + process.probeElePassL1TEle32WPTight        
+                                         + process.probeElePassL1TEtEle32WPTight        
+                                         + process.probeElePassGsfTrackIsoEle32WPTight
+    )
 
     if options['isMC'] :
         process.tag_sequence += process.genEle + process.genTagEle 
