@@ -1,5 +1,5 @@
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
-import sys
+import sys, os
 
 # this will use CRAB client API
 from CRABAPI.RawCommand import crabCommand
