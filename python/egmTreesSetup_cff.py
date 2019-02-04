@@ -361,8 +361,12 @@ def setSequences(process, options):
                                          + process.probeElePassL1T
                                          + process.probeElePassEtLeg1
                                          + process.probeElePassTrackIsoLeg1
+                                         + process.probeElePassHcalIsoLeg1
+                                         + process.probeElePassPixelMatchLeg1
                                          + process.probeElePassEtLeg2
                                          + process.probeElePassTrackIsoLeg2
+                                         + process.probeElePassHcalIsoLeg2
+                                         + process.probeElePassPixelMatchLeg2
                                          + process.probeElePassPMS2SeededFilterDouble33
                                          + process.probeElePassPMS2UnseededFilterDouble33
                                          + process.probeElePassL1TEle32WPTight        
