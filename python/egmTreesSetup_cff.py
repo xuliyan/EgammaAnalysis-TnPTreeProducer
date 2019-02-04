@@ -66,33 +66,28 @@ def setTagsProbes(process, options):
     #### Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v
     process.probeElePassL1T                     = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEGL1SingleAndDoubleEGOrPairFilter"))
 
-    #### Leg1
     FilterPre = "hltEle23Ele12CaloIdLTrackIdLIsoVL"
     Leg1Post = "Leg1Filter"
     EtLeg1Filter         = FilterPre + "Et" + Leg1Post
     TrackIsoLeg1Filter   = FilterPre + "TrackIso" + Leg1Post
     HcalIsoLeg1Filter    = FilterPre + "HcalIso" + Leg1Post
     PixelMatchLeg1Filter = FilterPre + "PixelMatch" + Leg1Post
-    TrackIsoLeg1Filter   = FilterPre + "TrackIso" + Leg1Post
 
     process.probeElePassEtLeg1                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg1Filter))
     process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg1Filter))
     process.probeElePassHcalIsoLeg1             = process.probeElePassHLT.clone(filterNames=cms.vstring(HcalIsoLeg1Filter))
     process.probeElePassPixelMatchLeg1          = process.probeElePassHLT.clone(filterNames=cms.vstring(PixelMatchLeg1Filter))
-    process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg1Filter))
 
     Leg2Post = "Leg2Filter"
     EtLeg2Filter         = FilterPre + "Et" + Leg2Post
     TrackIsoLeg2Filter   = FilterPre + "TrackIso" + Leg2Post
     HcalIsoLeg2Filter    = FilterPre + "HcalIso" + Leg2Post
     PixelMatchLeg2Filter = FilterPre + "PixelMatch" + Leg2Post
-    TrackIsoLeg2Filter   = FilterPre + "TrackIso" + Leg2Post
 
     process.probeElePassEtLeg2                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg2Filter))
     process.probeElePassTrackIsoLeg2            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
     process.probeElePassHcalIsoLeg2             = process.probeElePassHLT.clone(filterNames=cms.vstring(HcalIsoLeg2Filter))
     process.probeElePassPixelMatchLeg2          = process.probeElePassHLT.clone(filterNames=cms.vstring(PixelMatchLeg2Filter))
-    process.probeElePassTrackIsoLeg2            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
 
     #### DoubleEle33
     process.probeElePassPMS2UnseededFilterDouble33 = process.probeElePassHLT.clone(filterNames = cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"))
