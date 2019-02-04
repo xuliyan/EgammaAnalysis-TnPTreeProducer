@@ -79,8 +79,8 @@ def setTagsProbes(process, options):
     EtLeg2Filter = FilterPre + "Et" + Leg2Post
     TrackIsoLeg2Filter = FilterPre + "TrackIso" + Leg2Post
 
-    process.probeElePassEtLeg1                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg2Filter))
-    process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
+    process.probeElePassEtLeg2                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg2Filter))
+    process.probeElePassTrackIsoLeg2            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
 
     #### DoubleEle33
     process.probeElePassPMS2UnseededFilterDouble33 = process.probeElePassHLT.clone(filterNames = cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"))
