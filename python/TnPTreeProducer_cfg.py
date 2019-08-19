@@ -24,7 +24,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doPhoID", True,
+    "doPhoID", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
@@ -61,7 +61,7 @@ varOptions.register(
 
 varOptions.register(
     #"GT","auto",
-    "GT","101X_dataRun2_Prompt_v11",
+    "GT","105X_mc2017_realistic_v7",
     #"GT","102X_upgrade2018_realistic_v12",
     #"GT","94X_dataRun2_ReReco_EOY17_v6",
     #"GT","80X_dataRun2_2016LegacyRepro_v4",
@@ -143,7 +143,7 @@ if (varOptions.isMC):
     #options['TnPHLTTagFilters']    = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
     options['TnPHLTProbeFilters']  = cms.vstring()
     options['HLTFILTERTOMEASURE']  = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter")
-    options['GLOBALTAG']           = 'auto:run2_mc'
+    options['GLOBALTAG']           = '105X_mc2017_realistic_v7'
 else:
     options['OUTPUT_FILE_NAME']    = "TnPTree_data.root"
     options['TnPPATHS']            = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*") #FOR 2016
@@ -162,7 +162,8 @@ if varOptions.GT != "auto" :
 ###################################################################
 ## Define input files for test local run
 ###################################################################
-from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2018 as inputs
+#from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_Preliminary2018 as inputs
+from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesUL as inputs
 if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_Preliminary2018 as inputs #
 
 #if options['useAOD'] : 

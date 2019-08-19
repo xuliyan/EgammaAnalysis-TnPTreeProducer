@@ -194,11 +194,11 @@ void ElectronVariableHelper<T>::produce(edm::Event & iEvent, const edm::EventSet
     pfPtVals.push_back(pfpt);
 
     // Conversion vertex fit
-    reco::ConversionRef convRef = ConversionTools::matchedConversion(*probe, conversions, beamSpot->position());
+    reco::Conversion const* conv = ConversionTools::matchedConversion(*probe, *conversions, beamSpot->position());
 
     float convVtxFitProb = -1.;
-    if(!convRef.isNull()) {
-        const reco::Vertex &vtx = convRef.get()->conversionVertex();
+    if(conv){
+        const reco::Vertex &vtx = conv->conversionVertex();
         if (vtx.isValid()) {
             convVtxFitProb = TMath::Prob( vtx.chi2(),  vtx.ndof());
         }

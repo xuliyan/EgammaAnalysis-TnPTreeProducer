@@ -1,5 +1,15 @@
 import FWCore.ParameterSet.Config as cms
 
+filesUL = {
+ # 'mc' : cms.untracked.vstring('/store/relval/CMSSW_10_6_0_pre2/RelValZEE_13UP17/MINIAODSIM/PUpmx25ns_105X_mc2017_realistic_v7_ulhlt17_pmx-v1/10000/9F170AF6-3076-8140-BF8C-2D08C7C1CA64.root'),
+   'mc' : cms.untracked.vstring('/store/relval/CMSSW_10_6_1/RelValZEE_13UP18/MINIAODSIM/PUpmx25ns_106X_upgrade2018_realistic_v6_ul18hlt_premix_hs-v1/20000/E3576D3D-3410-A24E-BDB3-604E699EB351.root',
+                                '/store/relval/CMSSW_10_6_1/RelValZEE_13UP18/MINIAODSIM/PUpmx25ns_106X_upgrade2018_realistic_v6_ul18hlt_premix_hs-v1/20000/CC057E23-8E71-9545-9C67-EEF4404C63D8.root',
+                                '/store/relval/CMSSW_10_6_1/RelValZEE_13UP18/MINIAODSIM/PUpmx25ns_106X_upgrade2018_realistic_v6_ul18hlt_premix_hs-v1/20000/BFD9E97B-C7D8-0A43-B185-50F0A17B7BCD.root'),
+#  'mc' : cms.untracked.vstring('/store/relval/CMSSW_10_6_0_pre2/RelValZEE_13UP17/MINIAODSIM/PUpmx25ns_105X_mc2017_realistic_v7_ulhlt17hs_pmx-v1/10000/FAFAF53A-6A35-724B-9F45-0A497FB78A99.root',
+#                               '/store/relval/CMSSW_10_6_0_pre2/RelValZEE_13UP17/MINIAODSIM/PUpmx25ns_105X_mc2017_realistic_v7_ulhlt17hs_pmx-v1/10000/64B37998-DAAD-B34D-828C-2096252F57EB.root',
+#                               '/store/relval/CMSSW_10_6_0_pre2/RelValZEE_13UP17/MINIAODSIM/PUpmx25ns_105X_mc2017_realistic_v7_ulhlt17hs_pmx-v1/10000/1DC2A695-B7EC-D44D-B153-CFCA6A7F04FD.root'),
+  'data' : None,
+}
 
 filesMiniAOD_Preliminary2018 = {
     'mc' :  cms.untracked.vstring(
