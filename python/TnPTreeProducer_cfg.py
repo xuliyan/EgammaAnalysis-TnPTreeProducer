@@ -159,6 +159,24 @@ if varOptions.GT != "auto" :
     options['GLOBALTAG'] = varOptions.GT
 
 
+
+#### HLT_Ele32_WPTight
+base = 'hltEle32WPTight'
+options['filters']  = ['hltEGL1SingleEGOr', 'hltEG32L1SingleEGOrEt', base + 'ClusterShape', base + 'HE', base + 'EcalIso', base + 'HcalIso', base + 'PixelMatch', base + 'PMS2', base + 'GsfOneOEMinusOneOP', base + 'GsfMissingHits', base + 'GsfDeta', base + 'GsfDphi', base + 'GsfTrackIso']
+
+#### HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL
+base = 'hltEle23Ele12CaloIdLTrackIdLIsoVL'
+options['filters'] += ['hltEGL1SingleAndDoubleEGOrPair', base + 'EtLeg1', base + 'ClusterShapeLeg1', base + 'HELeg1', base + 'EcalIsoLeg1', base + 'HcalIsoLeg1', base + 'PixelMatchLeg1', base + 'OneOEMinusOneOPLeg1', base + 'DetaLeg1', base + 'DphiLeg1', base + 'TrackIsoLeg1',
+                                                         base + 'EtLeg2', base + 'ClusterShapeLeg2', base + 'HELeg2', base + 'EcalIsoLeg2', base + 'HcalIsoLeg2', base + 'PixelMatchLeg2', base + 'OneOEMinusOneOPLeg2', base + 'DetaLeg2', base + 'DphiLeg2', base + 'TrackIsoLeg2']
+
+#### HLT_DoubleEle33_CaloIdL_MW
+base = 'hltDiEG33'
+options['filters'] += ['EtUnseeded', 'HEUnseeded', 'CaloIdLClusterShapeUnseeded', 'CaloIdLPixelMatchUnseeded', 'CaloIdLMWPMS2Unseeded', 'Et', 'HE', 'CaloIdLClusterShape', 'CaloIdLPixelMatch', 'CaloIdLMWPMS2']
+
+options['filters'] = [(f + 'Filter') for f in options['filters']]
+
+
+
 ###################################################################
 ## Define input files for test local run
 ###################################################################
@@ -254,24 +272,11 @@ process.tnpEleTrig = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                         passingLoose94X   = cms.InputTag("probeEleCutBasedLoose94X" ),
                                         passingMedium94X  = cms.InputTag("probeEleCutBasedMedium94X"),
                                         passingTight94X   = cms.InputTag("probeEleCutBasedTight94X" ),
-                                        passL125seed                   = cms.InputTag("probeElePassL125seed"),
-                                        passL112seed                   = cms.InputTag("probeElePassL112seed"),
-                                        passL1TEle23Ele12              = cms.InputTag("probeElePassL1T"),
-                                        passEtLeg1Ele23Ele12           = cms.InputTag("probeElePassEtLeg1"),
-                                        passHcalIsoLeg1Ele23Ele12      = cms.InputTag("probeElePassHcalIsoLeg1"),
-                                        passPixelMatchLeg1Ele23Ele12   = cms.InputTag("probeElePassPixelMatchLeg1"),
-                                        passTrackIsoLeg1Ele23Ele12     = cms.InputTag("probeElePassTrackIsoLeg1"),
-                                        passEtLeg2Ele23Ele12           = cms.InputTag("probeElePassEtLeg2"),
-                                        passTrackIsoLeg2Ele23Ele12     = cms.InputTag("probeElePassTrackIsoLeg2"),
-                                        passHcalIsoLeg2Ele23Ele12      = cms.InputTag("probeElePassHcalIsoLeg2"),
-                                        passPixelMatchLeg2Ele23Ele12   = cms.InputTag("probeElePassPixelMatchLeg2"),
-                                        passL1TEle32WPTight            = cms.InputTag("probeElePassL1TEle32WPTight"),
-                                        passL1TEtEle32WPTight          = cms.InputTag("probeElePassL1TEtEle32WPTight"),
-                                        passGsfTrackIsoEle32WPTight    = cms.InputTag("probeElePassGsfTrackIsoEle32WPTight"),
-                                        passPMS2SeededFilterDouble33   = cms.InputTag("probeElePassPMS2SeededFilterDouble33"),
-                                        passPMS2UnseededFilterDouble33 = cms.InputTag("probeElePassPMS2UnseededFilterDouble33"),
                                         ),
                                     )
+
+for filter in options['filters']:
+  setattr(process.tnpEleTrig.flags, filter, cms.InputTag(filter))
 
 process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForSuperClusterProbe, 

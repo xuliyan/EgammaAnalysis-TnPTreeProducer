@@ -58,41 +58,8 @@ def setTagsProbes(process, options):
     process.probeElePassHLT.filterNames  = cms.vstring(options['HLTFILTERTOMEASURE'])
     process.probeElePassHLT.isAND        = cms.bool(False)
 
-    #### Ele32WPTight
-    process.probeElePassL1TEle32WPTight         = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEGL1SingleEGOrFilter"))
-    process.probeElePassL1TEtEle32WPTight       = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEG32L1SingleEGOrEtFilter"))
-    process.probeElePassGsfTrackIsoEle32WPTight = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEle32WPTightGsfTrackIsoFilter"))
-
-    #### Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v
-    process.probeElePassL1T                     = process.probeElePassHLT.clone(filterNames=cms.vstring("hltEGL1SingleAndDoubleEGOrPairFilter"))
-
-    FilterPre = "hltEle23Ele12CaloIdLTrackIdLIsoVL"
-    Leg1Post = "Leg1Filter"
-    EtLeg1Filter         = FilterPre + "Et" + Leg1Post
-    TrackIsoLeg1Filter   = FilterPre + "TrackIso" + Leg1Post
-    HcalIsoLeg1Filter    = FilterPre + "HcalIso" + Leg1Post
-    PixelMatchLeg1Filter = FilterPre + "PixelMatch" + Leg1Post
-
-    process.probeElePassEtLeg1                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg1Filter))
-    process.probeElePassTrackIsoLeg1            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg1Filter))
-    process.probeElePassHcalIsoLeg1             = process.probeElePassHLT.clone(filterNames=cms.vstring(HcalIsoLeg1Filter))
-    process.probeElePassPixelMatchLeg1          = process.probeElePassHLT.clone(filterNames=cms.vstring(PixelMatchLeg1Filter))
-
-    Leg2Post = "Leg2Filter"
-    EtLeg2Filter         = FilterPre + "Et" + Leg2Post
-    TrackIsoLeg2Filter   = FilterPre + "TrackIso" + Leg2Post
-    HcalIsoLeg2Filter    = FilterPre + "HcalIso" + Leg2Post
-    PixelMatchLeg2Filter = FilterPre + "PixelMatch" + Leg2Post
-
-    process.probeElePassEtLeg2                  = process.probeElePassHLT.clone(filterNames=cms.vstring(EtLeg2Filter))
-    process.probeElePassTrackIsoLeg2            = process.probeElePassHLT.clone(filterNames=cms.vstring(TrackIsoLeg2Filter))
-    process.probeElePassHcalIsoLeg2             = process.probeElePassHLT.clone(filterNames=cms.vstring(HcalIsoLeg2Filter))
-    process.probeElePassPixelMatchLeg2          = process.probeElePassHLT.clone(filterNames=cms.vstring(PixelMatchLeg2Filter))
-
-    #### DoubleEle33
-    process.probeElePassPMS2UnseededFilterDouble33 = process.probeElePassHLT.clone(filterNames = cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"))
-    process.probeElePassPMS2SeededFilterDouble33   = process.probeElePassHLT.clone(filterNames = cms.vstring("hltEle33CaloIdLMWPMS2Filter"))
-
+    for filter in options['filters']:
+      setattr(process, filter, process.probeElePassHLT.clone(filterNames=cms.vstring(filter)))
 
     ###################### PROBE PHOTONs ############################
     process.probePho  = cms.EDProducer( gamHLTProducer,
@@ -355,24 +322,9 @@ def setSequences(process, options):
         process.probePho                
         )
 
-    process.hlt_sequence = cms.Sequence( process.probeElePassHLT 
-                                         + process.probeElePassL125seed
-                                         + process.probeElePassL112seed
-                                         + process.probeElePassL1T
-                                         + process.probeElePassEtLeg1
-                                         + process.probeElePassTrackIsoLeg1
-                                         + process.probeElePassHcalIsoLeg1
-                                         + process.probeElePassPixelMatchLeg1
-                                         + process.probeElePassEtLeg2
-                                         + process.probeElePassTrackIsoLeg2
-                                         + process.probeElePassHcalIsoLeg2
-                                         + process.probeElePassPixelMatchLeg2
-                                         + process.probeElePassPMS2SeededFilterDouble33
-                                         + process.probeElePassPMS2UnseededFilterDouble33
-                                         + process.probeElePassL1TEle32WPTight        
-                                         + process.probeElePassL1TEtEle32WPTight        
-                                         + process.probeElePassGsfTrackIsoEle32WPTight
-    )
+    process.hlt_sequence = cms.Sequence( process.probeElePassHLT )
+    for filter in options['filters']:
+      process.hlt_sequence += getattr(process, filter)
 
     if options['isMC'] :
         process.tag_sequence += process.genEle + process.genTagEle 
