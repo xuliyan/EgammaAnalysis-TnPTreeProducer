@@ -1,14 +1,17 @@
 # EgammaAnalysis-TnPTreeProducer
-TnP package for EGM
+TnP package for EGM for UL
+
+*Currently this branch does not work with the doPhoIDs options*
+Based on the default RunIIfinal branch, but with minor updates to get it running in CMSSW\_10\_6\_X
 
 ## For regular users
-### 1. Install (CMSSW\_10\_2\_10 or higher, works for 2016, 2017 and 2018 data/MC)
+### 1. Install (CMSSW\_10\_6\_X or higher, works for 2016, 2017 and 2018 data/MC)
 
 ```
-cmsrel CMSSW_10_2_10
-cd CMSSW_10_2_10/src
+cmsrel CMSSW_10_6_10
+cd CMSSW_10_6_10/src
 cmsenv
-git clone -b RunIIfinal https://github.com/tomcornelis/EgammaAnalysis-TnPTreeProducer EgammaAnalysis/TnPTreeProducer
+git clone -b RunIIfinal_UL https://github.com/tomcornelis/EgammaAnalysis-TnPTreeProducer EgammaAnalysis/TnPTreeProducer
 scram b -j8
 ```
 

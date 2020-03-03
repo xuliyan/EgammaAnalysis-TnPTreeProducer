@@ -32,7 +32,7 @@ varOptions.register(
     )
 
 varOptions.register(
-    "doPhoID", True,
+    "doPhoID", False, # currently broken in this branch
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"

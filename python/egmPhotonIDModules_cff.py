@@ -29,6 +29,7 @@ def setIDs(process, options):
     for idmod in my_id_modules:
         setupAllVIDIdsInModule(process, idmod, setupVIDPhotonSelection)
 
+    process.load("RecoEgamma.PhotonIdentification.photonIDValueMapProducer_cff")
     process.egmPhotonIDs.physicsObjectSrc        = cms.InputTag(options['PHOTON_COLL'])
     process.photonIDValueMapProducer.srcMiniAOD  = cms.InputTag(options['PHOTON_COLL'])
     process.photonMVAValueMapProducer.srcMiniAOD = cms.InputTag(options['PHOTON_COLL'])
