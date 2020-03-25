@@ -11,7 +11,7 @@
 #include "DataFormats/Candidate/interface/Candidate.h"
 
 #include "DataFormats/RecoCandidate/interface/RecoEcalCandidate.h"
-#include "RecoEgamma/EgammaHLTAlgos/interface/EgammaHLTTrackIsolation.h"
+#include "RecoEgamma/EgammaIsolationAlgos/interface/EgammaHLTTrackIsolation.h"
 
 template <class T>
 class SCVariableHelper : public edm::EDProducer {

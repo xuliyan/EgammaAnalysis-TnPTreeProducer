@@ -1,6 +1,6 @@
 #include "PhysicsTools/SelectorUtils/interface/CutApplicatorBase.h"
 #include "CommonTools/Utils/interface/StringObjectFunction.h"
-#include "RecoEgamma/ElectronIdentification/interface/EBEECutValues.h"
+#include "RecoEgamma/EgammaTools/interface/EBEECutValues.h"
 
 class PatEleEBEECut : public CutApplicatorBase {
 public:

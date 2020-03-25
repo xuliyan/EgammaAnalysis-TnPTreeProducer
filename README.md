@@ -2,16 +2,16 @@
 TnP package for EGM for UL
 
 *Currently this branch does not work with the doPhoIDs options*
-Based on the default RunIIfinal branch, but with minor updates to get it running in CMSSW\_10\_6\_X
+Based on the default RunIIfinal branch, but with minor updates to get it running in CMSSW\_11\_X_\Y
 
 ## To produce new tuples
-### 1. Install (CMSSW\_10\_6\_X or higher)
+### 1. Install (CMSSW\_11\_0\_1 or higher)
 
 ```
-cmsrel CMSSW_10_6_10
-cd CMSSW_10_6_10/src
+cmsrel CMSSW_11_0_1
+cd CMSSW_11_0_1/src
 cmsenv
-git clone -b RunIIfinal_UL https://github.com/tomcornelis/EgammaAnalysis-TnPTreeProducer EgammaAnalysis/TnPTreeProducer
+git clone -b CMSSW_11_X_Y https://github.com/tomcornelis/EgammaAnalysis-TnPTreeProducer EgammaAnalysis/TnPTreeProducer
 scram b -j8
 ```
 
