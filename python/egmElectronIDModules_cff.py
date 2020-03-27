@@ -24,9 +24,9 @@ def setIDs(process, options):
        ]
 
     ### add only miniAOD supported IDs
-    if not options['useAOD'] :
+    if not options['useAOD']:
         my_id_modules.append( 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff' )
-        my_id_modules.append( 'EgammaAnalysis.TnPTreeProducer.Identification.cutBasedDoubleElectronHLTPreselecition_Summer16_V1_cff')
+   #     my_id_modules.append( 'EgammaAnalysis.TnPTreeProducer.Identification.cutBasedDoubleElectronHLTPreselecition_Summer16_V1_cff') # this is broken in CMSSW_11_0_X
 
     for idmod in my_id_modules:
         setupAllVIDIdsInModule(process, idmod, setupVIDElectronSelection)
@@ -71,7 +71,7 @@ def setIDs(process, options):
     probeSequence = cms.Sequence()
     if not options['useAOD']:
       addNewProbeModule(probeSequence, 'HLTsafe',          'egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1')
-      addNewProbeModule(probeSequence, 'DoubleEleHLTsafe', 'egmGsfElectronIDs:cutBasedDoubleElectronHLTPreselection-Summer16-V1')
+#      addNewProbeModule(probeSequence, 'DoubleEleHLTsafe', 'egmGsfElectronIDs:cutBasedDoubleElectronHLTPreselection-Summer16-V1')
 
     for wp in ['Veto', 'Loose', 'Medium', 'Tight']:
       addNewProbeModule(probeSequence, 'CutBased%s80X' % wp,   'egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-%s' % wp.lower())
@@ -89,6 +89,8 @@ def setIDs(process, options):
 
     addNewProbeModule(probeSequence, 'MVA94XwpHZZisoV2', 'egmGsfElectronIDs:mvaEleID-Fall17-iso-V2-wpHZZ')
 
+    # This part is broken in CMSSW_11_0_X:
+    """
     #
     # For cut based 94X V2, also check partial cuts
     #
@@ -99,7 +101,7 @@ def setIDs(process, options):
       otherCuts = cms.vstring([i + 'Cut_0' for i in allCuts if i!=cut])
       for wp in ['Veto', 'Loose', 'Medium', 'Tight']:
         addNewProbeModule(probeSequence, 'CutBased%s94XV2%sCut' % (wp, cut), 'egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-%s' % wp.lower(), cutNamesToMask=otherCuts)
-
+    """
     #
     # Optional: SUSY variables (broken?)
     #

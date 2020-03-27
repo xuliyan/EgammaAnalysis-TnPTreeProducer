@@ -4,6 +4,10 @@ def setPileUpConfiguration(process, options):
   if options['era']=='2016':   from SimGeneral.MixingModule.mix_2016_25ns_Moriond17MC_PoissonOOTPU_cfi import mix
   elif options['era']=='2017': from SimGeneral.MixingModule.mix_2017_25ns_WinterMC_PUScenarioV1_PoissonOOTPU_cfi import mix
   elif options['era']=='2018': from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
+  elif options['era']=='Run3': # Because someone though it was a good idea to put it directly into the cmsDriver command
+    from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
+    mix.input.nbPileupEvents.probFunctionVariable = cms.vint32(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80)
+    mix.input.nbPileupEvents.probValue = cms.vdouble(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784,0.01960784)
 
   #### DATA PU DISTRIBUTIONS
   data_pu_distribs = {"Jamboree_golden_JSON" : [5.12e+04,3.66e+05,5.04e+05,4.99e+05,7.5e+05,1.1e+06,2.53e+06,9.84e+06,4.4e+07,1.14e+08,1.94e+08,2.63e+08,2.96e+08,2.74e+08,2.06e+08,1.26e+08,6.38e+07,2.73e+07,1.1e+07,5.2e+06,3.12e+06,1.87e+06,9.35e+05,3.64e+05,1.1e+05,2.64e+04,5.76e+03,1.53e+03,594,278,131,59.8,26,10.8,4.29,1.62,0.587,0.203,0.0669,0.0211,0.00633,0.00182,0.000498,0.00013,3.26e-05,7.77e-06,1.77e-06,3.85e-07,7.99e-08,1.58e-08,3e-09,5.43e-10],

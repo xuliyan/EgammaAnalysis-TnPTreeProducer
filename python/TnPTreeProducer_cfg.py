@@ -25,7 +25,7 @@ varOptions.register(
 
 
 varOptions.register(
-    "doEleID", True,
+    "doEleID", False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Include tree for photon ID SF"
@@ -168,7 +168,7 @@ elif options['era'] == '2017':
                                    "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
                                   }
 
-elif options['era'] == '2018':
+elif options['era'] == '2018' or options['era'] == 'Run3':
   options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_v*")
   options['TnPHLTTagFilters']   = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
@@ -237,7 +237,7 @@ tnpSetup.setupTreeMaker(process,options)
 # If miniAOD, adding some leptonMva versions, as well
 # as some advanced input variables like miniIso
 ###################################################################
-if not options['useAOD']:
+if not options['useAOD'] and False: # broken in CMSSW_11_0_X
   from EgammaAnalysis.TnPTreeProducer.leptonMva_cff import leptonMvaSequence
   process.init_sequence += leptonMvaSequence(process, options, tnpVars)
 

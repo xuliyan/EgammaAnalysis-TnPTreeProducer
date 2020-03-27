@@ -94,6 +94,14 @@ def submitWrapper(requestName, sample, era, globalTag, extraParam=[]):
 # List of samples to submit, with eras and global tags
 # If you would switch to AOD, don't forget to add 'isAOD=True' to the defaultArgs!
 #
+era='2018'
+globalTag='110X_mcRun3_2021_realistic_v6'
+submitWrapper('validation110X', '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Run3Winter20DRMiniAOD-DRFlatPU30to80_110X_mcRun3_2021_realistic_v6-v2/MINIAODSIM', era, globalTag)
+globalTag='102X_upgrade2018_realistic_v15'
+submitWrapper('validation110X', '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18DRPremix-102X_upgrade2018_realistic_v15-v/MINIAODSIM', era, globalTag)
+
+
+"""
 era       = '2016'
 globalTag = '94X_dataRun2_v10'
 submitWrapper('Run2016B', '/SingleElectron/Run2016B-07Aug17_ver2-v2/MINIAOD', era, globalTag, ['is80X=True'])
@@ -134,3 +142,4 @@ submitWrapper('Run2018D', '/EGamma/Run2018D-22Jan2019-v2/MINIAOD', era, globalTa
 globalTag = '102X_upgrade2018_realistic_v20'
 submitWrapper('DY',     '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', era, globalTag)
 submitWrapper('DY_pow', '/DYToEE_M-50_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', era, globalTag)
+"""
