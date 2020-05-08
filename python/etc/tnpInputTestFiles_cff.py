@@ -6,6 +6,11 @@ filesMiniAOD_2018 = {
     'data' : cms.untracked.vstring('/store/data/Run2018A/EGamma/MINIAOD/17Sep2018-v2/100000/0004A5E9-9F18-6B42-B31D-4206406CE423.root'),
 }
 
+filesMiniAOD_UL2018 = {
+    'mc' :   cms.untracked.vstring('/store/mc/RunIISummer19UL18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/70000/00C34BB0-FB09-C54E-9F86-E9640A366B5F.root'),
+    'data' : cms.untracked.vstring('/store/data/Run2018D/EGamma/MINIAOD/12Nov2019_UL2018-v4/120000/F0574B49-1CA1-484A-9A3A-698B1903796D.root'),
+}
+
 filesMiniAOD_2017 = {
     'mc' :   cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14_ext3-v1/30000/84A5C6DA-1EDF-E911-B22B-FA163E1A63BB.root'),
     'data' : cms.untracked.vstring('/store/data/Run2017B/SingleElectron/MINIAOD/31Mar2018-v1/90000/021B46D3-C537-E811-9064-008CFAE452E0.root')
@@ -32,5 +37,7 @@ filesAOD_2018 = {
     'data' : cms.untracked.vstring('/store/data/Run2018B/EGamma/AOD/PromptReco-v1/000/317/864/00000/C269C719-EC71-E811-9C7E-FA163EF55202.root'),
 }
 
-
-
+filesAOD_UL2018 = {
+    'mc' :   cms.untracked.vstring('/store/mc/RunIISummer19UL18RECO/DYToEE_M-50_NNPDF31_TuneCP5_13TeV-powheg-pythia8/AODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/230000/696A0205-2900-054F-A4D8-8528E5EA34A9.root'),
+    'data' : cms.untracked.vstring('/store/data/Run2018D/EGamma/AOD/ForValUL2018-v2/60002/C1BC446B-0B7E-D74E-9FD0-E9506552EFB8.root'),
+}
