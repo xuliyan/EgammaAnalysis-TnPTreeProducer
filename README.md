@@ -1,8 +1,26 @@
 # EgammaAnalysis-TnPTreeProducer
 TnP package for EGM for UL
 
-*Currently this branch does not work with the doPhoIDs options*
-Based on the default RunIIfinal branch, but with minor updates to get it running in CMSSW\_10\_6\_X
+## Available trees 
+
+If you do not need changes to the default code, you can simply use existing flat tag and probe trees, avalaible for both 2016, 2017 and 2018 (RunIIfinal branch):
+```
+ls /eos/cms/store/group/phys_egamma/tnpTuples/tomc/2020-02-28/*/merged/ 
+``` 
+These inlcude the tnpEleTrig, tnpEleIDs and tnpPhoIDs trees.
+In case you need L1 matching for the measurement of doubleEle HLT triggers, you can use the tnpEleTrig trees found in:
+```
+ls /eos/cms/store/group/phys_egamma/tnpTuples/tomc/2020-03-03/*/merged/*L1matched.root 
+```
+
+## Overview of branches
+
+| Branch                                     | release            | tnpEleIDs          | tnpPhoIDs          | tnpEleTrig         | tnpEleReco         | miniAOD            |  AOD               |
+| ------------------------------------------ | ------------------ |:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| [RunIIfinal](../../tree/RunIIfinal)        | CMSSW\_10\_2       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: |
+| [RunIIfinal\_UL](../../tree/RunIIfinal_UL) | CMSSW\_10\_6       | :heavy_check_mark: | :white_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: |
+| [CMSSW\_11\_X\_Y](../../tree/CMSSW_11_X_Y) | CMSSW\_11          | :heavy_check_mark: | :white_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: |
+
 
 ## To produce new tuples
 ### 1. Install (CMSSW\_10\_6\_X or higher)
@@ -45,12 +63,3 @@ in [python/egmPhotonIDModules\_cff.py](python/egmPhotonIDModules_cff.py). Each n
 add a new "passing<WP>" boolean in the electron and photon trees respectively. Of course, one can also choose to simply add a variable in
 [python/egmTreesContent\_cff.py](python/egmTreesContent\_cff.py), which might be preferred for MVA variables when you want to have the
 flexibility to explore different workingpoints: you can simply put a cut on these variable in the egm\_tnp\_analysis package.
-
-## Note about leptonMva
-Some leptonMva variables are now included in the TnPTreeProducer trees. Unfortunately, it is very easy to get out of sync for these variables:
-even a new global tag could slightly alter the input variables, given some of them are dependent on the jet energy corrections or b-taggers which
-were in use when training these leptonMva's. Additionaly, some leptonMva's use (extremely) old effective areas for miniIso or relIso variables.
-We therefore strongly recommend leptonMva analyzers to sync with their own analysis code before producing tuples.
-The sync can easily be done by setting the debug flag to True in [python/leptonMva\_cff.py](python/leptonMva_cff.py). The leptonMva xml files
-are found in [data](data), and implementation of a new leptonMvaType can happen in the produce function in
-[plugins/LeptonMvaProducer.cc](plugins/LeptonMvaProducer.cc).
