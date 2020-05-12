@@ -14,7 +14,7 @@ def setIDs(process, options):
     my_id_modules = ['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring16_V2p2_cff'   ,
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff',
                      'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V1_cff',
-                     'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1_cff',
+                    #'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1_cff', # broken in CMSSW_10_6_X
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V2_cff',
                      'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'
                      ]
@@ -57,7 +57,7 @@ def setIDs(process, options):
 
     for wp in ['wp80', 'wp90']:
       addNewProbeModule(probeSequence, 'MVA80X%s' % wp,   'egmPhotonIDs:mvaPhoID-Spring16-nonTrig-V1-%s' % wp)
-      addNewProbeModule(probeSequence, 'MVA94X%s' % wp,   'egmPhotonIDs:mvaPhoID-RunIIFall17-v1-%s' % wp)
+     #addNewProbeModule(probeSequence, 'MVA94X%s' % wp,   'egmPhotonIDs:mvaPhoID-RunIIFall17-v1-%s' % wp) # broken in CMSSW_10_6_X
       addNewProbeModule(probeSequence, 'MVA94XV2%s' % wp, 'egmPhotonIDs:mvaPhoID-RunIIFall17-v2-%s' % wp)
 
 
