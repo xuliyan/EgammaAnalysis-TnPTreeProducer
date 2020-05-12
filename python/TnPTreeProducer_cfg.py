@@ -45,7 +45,7 @@ if varOptions.isAOD and varOptions.doEleID:        log.warning('AOD is not suppo
 if varOptions.isAOD and varOptions.doPhoID:        log.warning('AOD is not supported for doPhoID, please consider using miniAOD')
 if varOptions.isAOD and varOptions.doTrigger:      log.warning('AOD is not supported for doTrigger, please consider using miniAOD')
 if not varOptions.isAOD and varOptions.doRECO:     log.warning('miniAOD is not supported for doRECO, please consider using AOD')
-if varOptions.era not in ['2016', '2017', '2018']: log.error('%s is not a valid era' % options['era'])
+if varOptions.era not in ['2016', '2017', '2018', 'UL2017', 'UL2018']: log.error('%s is not a valid era' % options['era'])
 
 if varOptions.includeSUSY: log.info('Including variables for SUSY')
 if varOptions.doEleID:     log.info('Producing electron SF tree')
