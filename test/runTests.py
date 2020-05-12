@@ -18,12 +18,13 @@ def system(command):
 #
 # Simply run a test for both data/MC for 2016, 2017 and 2018
 #
-for isAOD in [False]:
+for isAOD in [False, True]:
   if isAOD: treesToRun = ['tnpEleReco']
   else:     treesToRun = ['tnpEleIDs', 'tnpPhoIDs', 'tnpEleTrig']
 
   for isMC in [False, True]:
-    for era in ['2016', '2017', '2018']:
+    for era in ['2016', '2017', '2018', 'UL2017', 'UL2018']:
+      if isAOD and not 'UL' in era: continue
 
       options  = ['era=%s maxEvents=1000' % era]
       options += ['isAOD=True'] if isAOD else []
