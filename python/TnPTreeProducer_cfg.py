@@ -145,7 +145,7 @@ options['GLOBALTAG']            = varOptions.GT if varOptions.GT != "auto" else 
 #################################################
 # Settings for trigger tag and probe measurement
 #################################################
-if options['era'] == '2016':
+if '2016' in options['era']:
   options['TnPPATHS']           = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*")
   options['TnPHLTTagFilters']   = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
@@ -156,7 +156,7 @@ if options['era'] == '2016':
                                    "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
                                   } # Some examples, you can add multiple filters (or OR's of filters, note the vstring) here, each of them will be added to the tuple
 
-elif options['era'] == '2017':
+elif '2017' in options['era']:
   options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
   options['TnPHLTTagFilters']   = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
@@ -168,7 +168,7 @@ elif options['era'] == '2017':
                                    "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
                                   }
 
-elif options['era'] == '2018':
+elif '2018' in options['era']:
   options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_v*")
   options['TnPHLTTagFilters']   = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
@@ -181,9 +181,11 @@ elif options['era'] == '2018':
 else:
   print '%s is not a valid era' % options['era']
 
+
 # Apply L1 matching (using L1Threshold) when flag contains "L1match" in name
 options['ApplyL1Matching']      = any(['L1match' in flag for flag in options['HLTFILTERSTOMEASURE'].keys()])
 options['L1Threshold']          = varOptions.L1Threshold
+
 
 ###################################################################
 ## Define input files for test local run
@@ -197,9 +199,16 @@ if options['era'] == '2017':
 if options['era'] == '2018':
   if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_2018 as inputs
   else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_2018 as inputs
+if options['era'] == 'UL2018':
+  options['era']='2018'
+  if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_UL2018 as inputs
+  else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_UL2018 as inputs
+if options['era'] == 'UL2017':
+  options['era']='2017'
+  if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_UL2017 as inputs
+  else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_UL2017 as inputs
 
 options['INPUT_FILE_NAME'] = inputs['mc' if varOptions.isMC else 'data']
-#options['INPUT_FILE_NAME'] = cms.untracked.vstring('file:pickevents.root')
 
 
 ###################################################################
