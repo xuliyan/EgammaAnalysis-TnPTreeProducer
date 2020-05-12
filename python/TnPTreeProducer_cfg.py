@@ -181,7 +181,7 @@ pileUpSetup.setPileUpConfiguration(process, options)
 ###################################################################
 import EgammaAnalysis.TnPTreeProducer.egmTreesContent_cff as tnpVars
 if options['useAOD']: tnpVars.setupTnPVariablesForAOD()
-tnpVars.mcTruthCommonStuff.isMC = cms.bool(options['isMC'])
+mcTruthCommonStuff = tnpVars.getTnPVariablesForMCTruth(options['isMC'])
 
 ###################################################################
 ## Import Tnp setup
@@ -228,7 +228,8 @@ if options['DoPhoID']   : process.tnpPairs_sequence *= process.tnpPairingPhoIDs
 ## TnP Trees
 ##########################################################################
 process.tnpEleTrig = cms.EDAnalyzer("TagProbeFitTreeProducer",
-                                    tnpVars.CommonStuffForGsfElectronProbe, tnpVars.mcTruthCommonStuff,
+                                    mcTruthCommonStuff,
+                                    tnpVars.CommonStuffForGsfElectronProbe,
                                     tagProbePairs = cms.InputTag("tnpPairingEleHLT"),
                                     probeMatches  = cms.InputTag("genProbeEle"),
                                     allProbes     = cms.InputTag("probeEle"),
@@ -240,7 +241,8 @@ for flag in options['HLTFILTERSTOMEASURE']:
 
 
 process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
-                                    tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForSuperClusterProbe,
+                                    mcTruthCommonStuff,
+                                    tnpVars.CommonStuffForSuperClusterProbe,
                                     tagProbePairs = cms.InputTag("tnpPairingEleRec"),
                                     probeMatches  = cms.InputTag("genProbeSC"),
                                     allProbes     = cms.InputTag("probeSC"),
@@ -253,7 +255,8 @@ process.tnpEleReco = cms.EDAnalyzer("TagProbeFitTreeProducer",
                                     )
 
 process.tnpEleIDs = cms.EDAnalyzer("TagProbeFitTreeProducer",
-                                    tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForGsfElectronProbe,
+                                    mcTruthCommonStuff,
+                                    tnpVars.CommonStuffForGsfElectronProbe,
                                     tagProbePairs = cms.InputTag("tnpPairingEleIDs"),
                                     probeMatches  = cms.InputTag("genProbeEle"),
                                     allProbes     = cms.InputTag("probeEle"),
@@ -270,7 +273,8 @@ for probeEleModule in str(process.ele_sequence).split('+'):
 
 
 process.tnpPhoIDs = cms.EDAnalyzer("TagProbeFitTreeProducer",
-                                    tnpVars.mcTruthCommonStuff, tnpVars.CommonStuffForPhotonProbe,
+                                    mcTruthCommonStuff,
+                                    tnpVars.CommonStuffForPhotonProbe,
                                     tagProbePairs = cms.InputTag("tnpPairingPhoIDs"),
                                     probeMatches  = cms.InputTag("genProbePho"),
                                     allProbes     = cms.InputTag("probePho"),
