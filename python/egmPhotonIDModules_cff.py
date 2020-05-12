@@ -64,7 +64,7 @@ def setIDs(process, options):
     #
     # For cut based 94X V2, also check partial cuts
     #
-    allCuts = ["MinPtCut_0", "PhoSCEtaMultiRangeCut_0", "PhoSingleTowerHadOverEmCut_0", "PhoFull5x5SigmaIEtaIEtaCut_0", "PhoAnyPFIsoWithEACut_0", "PhoAnyPFIsoWithEAAndQuadScalingCut_0", "PhoAnyPFIsoWithEACut_1"]
+    allCuts = ["MinPtCut_0", "PhoSCEtaMultiRangeCut_0", "PhoSingleTowerHadOverEmCut_0", "PhoFull5x5SigmaIEtaIEtaCut_0", "PhoGenericRhoPtScaledCut_0", "PhoGenericRhoPtScaledCut_1", "PhoGenericRhoPtScaledCut_2"]
     for cut in allCuts:
       otherCuts = cms.vstring([i for i in allCuts if i!=cut])
       cutName   = cut.replace('_','').replace('0','') # special case for the PhoAnyPFIsoWithEACut_1

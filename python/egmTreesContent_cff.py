@@ -153,15 +153,15 @@ PhoProbeVariablesToStore = cms.PSet(
     ph_r9            = cms.string("r9"),
     ph_sieie         = cms.string("full5x5_sigmaIetaIeta"),
     ph_s4            = cms.string("full5x5_showerShapeVariables.e2x2/full5x5_showerShapeVariables.e5x5"),
-    ph_sieip         = cms.InputTag("photonIDValueMapProducer:phoFull5x5SigmaIEtaIPhi"),
-    ph_ESsigma       = cms.InputTag("photonIDValueMapProducer:phoESEffSigmaRR"),
+    ph_sieip         = cms.string("full5x5_showerShapeVariables.sigmaIetaIphi"),
+    ph_ESsigma       = cms.string("full5x5_showerShapeVariables.effSigmaRR"),
     ph_hoe           = cms.string("hadronicOverEm"),
 
 #iso
-    ph_chIso    = cms.InputTag("photonIDValueMapProducer:phoChargedIsolation"),
-    ph_neuIso   = cms.InputTag("photonIDValueMapProducer:phoNeutralHadronIsolation"),
-    ph_phoIso   = cms.InputTag("photonIDValueMapProducer:phoPhotonIsolation"),
-    ph_chWorIso = cms.InputTag("photonIDValueMapProducer:phoWorstChargedIsolation"), 
+    ph_chIso    = cms.string("chargedHadronIso"),
+    ph_neuIso   = cms.string("neutralHadronIso"),
+    ph_phoIso   = cms.string("photonIso"),
+    ph_chWorIso = cms.string("chargedHadronWorstVtxIso"),
 
 #pho mva
     ph_mva80X       = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring16NonTrigV1Values"),
