@@ -5,6 +5,8 @@ if not 'CMSSW_BASE' in os.environ or os.environ['CMSSW_BASE'].replace('/storage_
   print('\033[1m\033[91mPlease do cmsenv first!')
   exit(0)
 
+try:    os.makedirs('log')
+except: pass
 
 # System command and retrieval of its output
 def system(command):
@@ -17,10 +19,13 @@ def system(command):
 # Simply run a test for both data/MC for 2016, 2017 and 2018
 #
 for isAOD in [False]:
+  if isAOD: treesToRun = ['tnpEleReco']
+  else:     treesToRun = ['tnpEleIDs', 'tnpPhoIDs', 'tnpEleTrig']
+
   for isMC in [False, True]:
     for era in ['2016', '2017', '2018']:
 
-      options  = ['doRECO=True', 'era=%s maxEvents=1000' % era]
+      options  = ['era=%s maxEvents=1000' % era]
       options += ['isAOD=True'] if isAOD else []
       options += ['isMC=True'] if isMC else []
       system('source /cvmfs/cms.cern.ch/cmsset_default.sh;eval `scram runtime -sh`;cmsRun ../python/TnPTreeProducer_cfg.py %s' % ' '.join(options))
@@ -28,7 +33,8 @@ for isAOD in [False]:
       outFile = 'rootfiles/TnPTree_%s_%s_%s.root' % ('mc' if isMC else 'data', era, 'AOD' if isAOD else 'miniAOD')
       shutil.move('TnPTree_%s.root' % ('mc' if isMC else 'data'), outFile)
 
-      for tree in ['tnpEleIDs', 'tnpPhoIDs', 'tnpEleTrig', 'tnpEleReco']:
+      for tree in treesToRun:
+ 
 	report = 'log/report_%s_%s_%s_%s.log' % ('mc' if isMC else 'data', era, 'AOD' if isAOD else 'miniAOD', tree)
 
 	print ('Testing for options %s and tree %s...' % (' '.join(options), tree)),
