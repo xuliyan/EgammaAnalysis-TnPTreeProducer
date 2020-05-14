@@ -29,7 +29,7 @@ registerOption('includeSUSY', False,    'Add also the variables used by SUSY')
 
 registerOption('HLTname',     'HLT',    'HLT process name (default HLT)', optionType=VarParsing.varType.string) # HLTname was HLT2 in now outdated reHLT samples
 registerOption('GT',          'auto',   'Global Tag to be used', optionType=VarParsing.varType.string)
-registerOption('era',         '2018',   'Data-taking era: 2016, 2017 or 2018', optionType=VarParsing.varType.string)
+registerOption('era',         '2018',   'Data-taking era: 2016, 2017, 2018, UL2017, UL2018', optionType=VarParsing.varType.string)
 registerOption('logLevel',    'INFO',   'Loglevel: could be DEBUG, INFO, WARNING, ERROR', optionType=VarParsing.varType.string)
 
 registerOption('L1Threshold',  0,       'Threshold for L1 matched objects', optionType=VarParsing.varType.int)
@@ -92,13 +92,17 @@ options['OUTPUT_FILE_NAME']     = "TnPTree_%s.root" % ("mc" if options['isMC'] e
 #################################################
 if varOptions.GT == "auto":
   if options['isMC']:
-    if options['era'] == '2016': options['GLOBALTAG'] = '94X_mcRun2_asymptotic_v3'
-    if options['era'] == '2017': options['GLOBALTAG'] = '94X_mc2017_realistic_v17'
-    if options['era'] == '2018': options['GLOBALTAG'] = '102X_upgrade2018_realistic_v20'
+    if options['era'] == '2016':   options['GLOBALTAG'] = '94X_mcRun2_asymptotic_v3'
+    if options['era'] == '2017':   options['GLOBALTAG'] = '94X_mc2017_realistic_v17'
+    if options['era'] == '2018':   options['GLOBALTAG'] = '102X_upgrade2018_realistic_v20'
+    if options['era'] == 'UL2017': options['GLOBALTAG'] = '106X_dataRun2_v28'
+    if options['era'] == 'UL2018': options['GLOBALTAG'] = '106X_dataRun2_v28'
   else:
-    if options['era'] == '2016': options['GLOBALTAG'] = '94X_dataRun2_v10'
-    if options['era'] == '2017': options['GLOBALTAG'] = '94X_dataRun2_v11'
-    if options['era'] == '2018': options['GLOBALTAG'] = '102X_dataRun2_v12'
+    if options['era'] == '2016':   options['GLOBALTAG'] = '94X_dataRun2_v10'
+    if options['era'] == '2017':   options['GLOBALTAG'] = '94X_dataRun2_v11'
+    if options['era'] == '2018':   options['GLOBALTAG'] = '102X_dataRun2_v12'
+    if options['era'] == 'UL2017': options['GLOBALTAG'] = '106X_mc2017_realistic_v7'
+    if options['era'] == 'UL2018': options['GLOBALTAG'] = '106X_upgrade2018_realistic_v11_L1v1'
 else:
   options['GLOBALTAG'] = varOptions.GT
 
