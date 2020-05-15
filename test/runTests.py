@@ -23,8 +23,7 @@ for isAOD in [False, True]:
   else:     treesToRun = ['tnpEleIDs', 'tnpPhoIDs', 'tnpEleTrig']
 
   for isMC in [False, True]:
-    for era in ['2016', '2017', '2018', 'UL2017', 'UL2018']:
-      if isAOD and not 'UL' in era: continue
+    for era in ['UL2017', 'UL2018']:
 
       options  = ['era=%s maxEvents=1000' % era]
       options += ['isAOD=True'] if isAOD else []

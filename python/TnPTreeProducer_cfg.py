@@ -45,7 +45,7 @@ if varOptions.isAOD and varOptions.doEleID:        log.warning('AOD is not suppo
 if varOptions.isAOD and varOptions.doPhoID:        log.warning('AOD is not supported for doPhoID, please consider using miniAOD')
 if varOptions.isAOD and varOptions.doTrigger:      log.warning('AOD is not supported for doTrigger, please consider using miniAOD')
 if not varOptions.isAOD and varOptions.doRECO:     log.warning('miniAOD is not supported for doRECO, please consider using AOD')
-if varOptions.era not in ['2016', '2017', '2018', 'UL2017', 'UL2018']: log.error('%s is not a valid era' % options['era'])
+if varOptions.era not in ['UL2017', 'UL2018']:     log.error('%s is not a valid era' % options['era'])
 
 if varOptions.includeSUSY: log.info('Including variables for SUSY')
 if varOptions.doEleID:     log.info('Producing electron SF tree')
@@ -92,15 +92,9 @@ options['OUTPUT_FILE_NAME']     = "TnPTree_%s.root" % ("mc" if options['isMC'] e
 #################################################
 if varOptions.GT == "auto":
   if options['isMC']:
-    if options['era'] == '2016':   options['GLOBALTAG'] = '94X_mcRun2_asymptotic_v3'
-    if options['era'] == '2017':   options['GLOBALTAG'] = '94X_mc2017_realistic_v17'
-    if options['era'] == '2018':   options['GLOBALTAG'] = '102X_upgrade2018_realistic_v20'
     if options['era'] == 'UL2017': options['GLOBALTAG'] = '106X_dataRun2_v28'
     if options['era'] == 'UL2018': options['GLOBALTAG'] = '106X_dataRun2_v28'
   else:
-    if options['era'] == '2016':   options['GLOBALTAG'] = '94X_dataRun2_v10'
-    if options['era'] == '2017':   options['GLOBALTAG'] = '94X_dataRun2_v11'
-    if options['era'] == '2018':   options['GLOBALTAG'] = '102X_dataRun2_v12'
     if options['era'] == 'UL2017': options['GLOBALTAG'] = '106X_mc2017_realistic_v7'
     if options['era'] == 'UL2018': options['GLOBALTAG'] = '106X_upgrade2018_realistic_v11_L1v1'
 else:
@@ -152,21 +146,10 @@ options['L1Threshold']          = varOptions.L1Threshold
 ###################################################################
 ## Define input files for test local run
 ###################################################################
-if options['era'] == '2016':
-  if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_2016 as inputs
-  else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_2016 as inputs
-if options['era'] == '2017':
-  if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_2017 as inputs
-  else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_2017 as inputs
-if options['era'] == '2018':
-  if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_2018 as inputs
-  else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_2018 as inputs
 if options['era'] == 'UL2018':
-  options['era']='2018'
   if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_UL2018 as inputs
   else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_UL2018 as inputs
 if options['era'] == 'UL2017':
-  options['era']='2017'
   if options['useAOD'] : from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesAOD_UL2017 as inputs
   else:                  from EgammaAnalysis.TnPTreeProducer.etc.tnpInputTestFiles_cff import filesMiniAOD_UL2017 as inputs
 

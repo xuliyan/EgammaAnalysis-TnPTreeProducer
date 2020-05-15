@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 def setPileUpConfiguration(process, options):
   if   '2016' in options['era']: from SimGeneral.MixingModule.mix_2016_25ns_Moriond17MC_PoissonOOTPU_cfi import mix
-  elif '2018' in options['era']: from SimGeneral.MixingModule.mix_2017_25ns_WinterMC_PUScenarioV1_PoissonOOTPU_cfi import mix
+  elif '2017' in options['era']: from SimGeneral.MixingModule.mix_2017_25ns_WinterMC_PUScenarioV1_PoissonOOTPU_cfi import mix
   elif '2018' in options['era']: from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
 
   #### DATA PU DISTRIBUTIONS
