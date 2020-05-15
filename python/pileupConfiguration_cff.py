@@ -1,9 +1,9 @@
 import FWCore.ParameterSet.Config as cms
 
 def setPileUpConfiguration(process, options):
-  if options['era']=='2016':   from SimGeneral.MixingModule.mix_2016_25ns_Moriond17MC_PoissonOOTPU_cfi import mix
-  elif options['era']=='2017': from SimGeneral.MixingModule.mix_2017_25ns_WinterMC_PUScenarioV1_PoissonOOTPU_cfi import mix
-  elif options['era']=='2018': from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
+  if   '2016' in options['era']: from SimGeneral.MixingModule.mix_2016_25ns_Moriond17MC_PoissonOOTPU_cfi import mix
+  elif '2017' in options['era']: from SimGeneral.MixingModule.mix_2017_25ns_WinterMC_PUScenarioV1_PoissonOOTPU_cfi import mix
+  elif '2018' in options['era']: from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
   elif options['era']=='Run3': # Because someone though it was a good idea to put it directly into the cmsDriver command
     from SimGeneral.MixingModule.mix_2018_25ns_JuneProjectionFull18_PoissonOOTPU_cfi import mix
     mix.input.nbPileupEvents.probFunctionVariable = cms.vint32(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80)
@@ -20,9 +20,11 @@ def setPileUpConfiguration(process, options):
                       "2018_DATA_xSec69.2mb": [2.91e+05,1.02e+06,3.12e+06,6.82e+06,1.2e+07,1.86e+07,2.75e+07,4e+07,5.65e+07,7.82e+07,1.09e+08,1.53e+08,2.12e+08,2.9e+08,3.89e+08,5.1e+08,6.54e+08,8.22e+08,1.01e+09,1.2e+09,1.39e+09,1.56e+09,1.71e+09,1.83e+09,1.93e+09,2e+09,2.06e+09,2.12e+09,2.17e+09,2.22e+09,2.27e+09,2.32e+09,2.35e+09,2.37e+09,2.38e+09,2.37e+09,2.33e+09,2.27e+09,2.18e+09,2.07e+09,1.92e+09,1.76e+09,1.58e+09,1.38e+09,1.19e+09,1e+09,8.27e+08,6.69e+08,5.3e+08,4.12e+08,3.15e+08,2.37e+08,1.76e+08,1.29e+08,9.41e+07,6.78e+07,4.85e+07,3.45e+07,2.44e+07,1.72e+07,1.2e+07,8.34e+06,5.75e+06,3.93e+06,2.66e+06,1.78e+06,1.18e+06,7.72e+05,5e+05,3.21e+05,2.03e+05,1.27e+05,7.91e+04,4.87e+04,2.97e+04,1.79e+04,1.07e+04,6.35e+03,3.73e+03,2.17e+03,1.25e+03,714,402,224,123,67.1,36,19,9.93,5.1,2.58,1.29,0.632,0.305,0.145,0.0679,0.0313,0.0142,0.0063,0.00276],
    }
 
-  if options['era']=='2016':   data_pu_distribution = data_pu_distribs['MORIOND2017_JSON_36fb_xSec69.2mb']
-  elif options['era']=='2017': data_pu_distribution = data_pu_distribs['2017_DATA_xSec69.2mb_94X_17Jan']
-  elif options['era']=='2018': data_pu_distribution = data_pu_distribs['2018_DATA_xSec69.2mb']
+  if   '2016' in options['era']: data_pu_distribution = data_pu_distribs['MORIOND2017_JSON_36fb_xSec69.2mb']
+  elif '2017' in options['era']: data_pu_distribution = data_pu_distribs['2017_DATA_xSec69.2mb_94X_17Jan']
+  elif '2018' in options['era']: data_pu_distribution = data_pu_distribs['2018_DATA_xSec69.2mb']
+  elif options['era']=='Run3':   data_pu_distribution = data_pu_distribs['2018_DATA_xSec69.2mb'] # just to have something to reweight to
+
 
   process.pileupReweightingProducer = cms.EDProducer("PileupWeightProducer",
                                   pileupInfoTag = cms.InputTag("slimmedAddPileupInfo"),

@@ -14,7 +14,7 @@ def setIDs(process, options):
     my_id_modules = ['RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring16_V2p2_cff'   ,
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff',
                      'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V1_cff',
-                     'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1_cff',
+                    #'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V1_cff', # broken in CMSSW_10_6_X
                      'RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V2_cff',
                      'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Fall17_94X_V2_cff'
                      ]
@@ -57,14 +57,14 @@ def setIDs(process, options):
 
     for wp in ['wp80', 'wp90']:
       addNewProbeModule(probeSequence, 'MVA80X%s' % wp,   'egmPhotonIDs:mvaPhoID-Spring16-nonTrig-V1-%s' % wp)
-      addNewProbeModule(probeSequence, 'MVA94X%s' % wp,   'egmPhotonIDs:mvaPhoID-RunIIFall17-v1-%s' % wp)
+     #addNewProbeModule(probeSequence, 'MVA94X%s' % wp,   'egmPhotonIDs:mvaPhoID-RunIIFall17-v1-%s' % wp) # broken in CMSSW_10_6_X
       addNewProbeModule(probeSequence, 'MVA94XV2%s' % wp, 'egmPhotonIDs:mvaPhoID-RunIIFall17-v2-%s' % wp)
 
 
     #
     # For cut based 94X V2, also check partial cuts
     #
-    allCuts = ["MinPtCut_0", "PhoSCEtaMultiRangeCut_0", "PhoSingleTowerHadOverEmCut_0", "PhoFull5x5SigmaIEtaIEtaCut_0", "PhoAnyPFIsoWithEACut_0", "PhoAnyPFIsoWithEAAndQuadScalingCut_0", "PhoAnyPFIsoWithEACut_1"]
+    allCuts = ["MinPtCut_0", "PhoSCEtaMultiRangeCut_0", "PhoSingleTowerHadOverEmCut_0", "PhoFull5x5SigmaIEtaIEtaCut_0", "PhoGenericRhoPtScaledCut_0", "PhoGenericRhoPtScaledCut_1", "PhoGenericRhoPtScaledCut_2"]
     for cut in allCuts:
       otherCuts = cms.vstring([i for i in allCuts if i!=cut])
       cutName   = cut.replace('_','').replace('0','') # special case for the PhoAnyPFIsoWithEACut_1
