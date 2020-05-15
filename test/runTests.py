@@ -26,7 +26,7 @@ for isAOD in [False, True]:
     for era in ['UL2017', 'UL2018']:
 
       options  = ['era=%s' % era, 'maxEvents=1000']
-      options += ['isAOD=True', 'doRECO=True'] if isAOD else ['doEleID=True', 'doPhoID=True', 'doTrigger=True']
+      options += ['isAOD=True', 'doRECO=True', 'doEleID=False', 'doPhoID=False', 'doTrigger=False'] if isAOD else ['doRECO=False', 'doEleID=True', 'doPhoID=True', 'doTrigger=True']
       options += ['isMC=True'] if isMC else []
       system('source /cvmfs/cms.cern.ch/cmsset_default.sh;eval `scram runtime -sh`;cmsRun ../python/TnPTreeProducer_cfg.py %s' % ' '.join(options))
 
