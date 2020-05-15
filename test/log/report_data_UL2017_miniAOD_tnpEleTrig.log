@@ -1,35 +1,42 @@
- -- comparing nEvts:  48
+ -- comparing nEvts:  87
 Used parameters:
 ----------------
-Target file:    rootfiles/TnPTree_data_2018_miniAOD.root
-Reference file: rootfiles/TnPTree_data_2018_miniAOD_ref.root
-Directory name: tnpEleIDs
+Target file:    rootfiles/TnPTree_data_UL2017_miniAOD.root
+Reference file: rootfiles/TnPTree_data_UL2017_miniAOD_ref.root
+Directory name: tnpEleTrig
 Tree name:      fitter_tree
 Cut value:      0
 
 Trees properties:
 -----------------
-Number of events (target/reference): 48/48
-Number of branches (target/reference): 198/198
+Number of events (target/reference): 87/87
+Number of branches (target/reference): 204/209
 
 Branches which do not differ:
 -----------------------------
 Increase verbosity (-v) to show this
 
-Entries: 195
+Entries: 199
 
 Branches which differ:
 ----------------------
-el_leptonMva_TOP : MSE 769706.736197
-el_leptonMva_ghent : MSE 769568.04164
-el_leptonMva_ttH : MSE 769449.826734
+el_leptonMva_TOP : MSE 700567.702601
+el_leptonMva_ghent : MSE 700321.400013
+el_leptonMva_ttH : MSE 700185.630253
+el_ptRatio : MSE 0.000101229832934
+el_ptRel : MSE 12.5795128515
 
-Entries: 3
+Entries: 5
 
 Branches found in reference but not in target:
 ----------------------------------------------
+mc_probe_e
+mc_probe_et
+mc_probe_eta
+mc_probe_phi
+mc_probe_flag
 
-Entries: 0
+Entries: 5
 
 Branches found in target but not in reference:
 ----------------------------------------------
@@ -40,6 +47,7 @@ Branches in target with a single value in all entries:
 ------------------------------------------------------
 el_convVtxFitProb : value -1.0
 passingCutBasedLoose94XV2GsfEleConversionVetoCut : value 1
+passingCutBasedLoose94XV2GsfEleEInverseMinusPInverseCut : value 1
 passingCutBasedLoose94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedLoose94XV2MinPtCut : value 1
 passingCutBasedMedium94XV2GsfEleConversionVetoCut : value 1
@@ -49,22 +57,24 @@ passingCutBasedTight94XV2GsfEleConversionVetoCut : value 1
 passingCutBasedTight94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedTight94XV2MinPtCut : value 1
 passingCutBasedVeto94XV2GsfEleConversionVetoCut : value 1
+passingCutBasedVeto94XV2GsfEleEInverseMinusPInverseCut : value 1
+passingCutBasedVeto94XV2GsfEleMissingHitsCut : value 1
 passingCutBasedVeto94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedVeto94XV2MinPtCut : value 1
-run : value 316271
-lumi : value 51
+run : value 305112
+lumi : value 315
 truePU : value 0
-event_BeamSpot_x : value 0.0961619243026
-event_BeamSpot_y : value -0.0662731900811
-event_BeamSpot_z : value 0.0355891361833
-tag_Ele_3charge : value 1.0
+event_BeamSpot_x : value 0.0844484940171
+event_BeamSpot_y : value -0.0299547631294
+event_BeamSpot_z : value 0.445962071419
 
-Entries: 20
+Entries: 22
 
 Branches in reference with a single value in all entries:
 ---------------------------------------------------------
 el_convVtxFitProb : value -1.0
 passingCutBasedLoose94XV2GsfEleConversionVetoCut : value 1
+passingCutBasedLoose94XV2GsfEleEInverseMinusPInverseCut : value 1
 passingCutBasedLoose94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedLoose94XV2MinPtCut : value 1
 passingCutBasedMedium94XV2GsfEleConversionVetoCut : value 1
@@ -74,15 +84,16 @@ passingCutBasedTight94XV2GsfEleConversionVetoCut : value 1
 passingCutBasedTight94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedTight94XV2MinPtCut : value 1
 passingCutBasedVeto94XV2GsfEleConversionVetoCut : value 1
+passingCutBasedVeto94XV2GsfEleEInverseMinusPInverseCut : value 1
+passingCutBasedVeto94XV2GsfEleMissingHitsCut : value 1
 passingCutBasedVeto94XV2GsfEleSCEtaMultiRangeCut : value 1
 passingCutBasedVeto94XV2MinPtCut : value 1
-run : value 316271
-lumi : value 51
+run : value 305112
+lumi : value 315
 truePU : value 0
-event_BeamSpot_x : value 0.0961619243026
-event_BeamSpot_y : value -0.0662731900811
-event_BeamSpot_z : value 0.0355891361833
-tag_Ele_3charge : value 1.0
+event_BeamSpot_x : value 0.0844484940171
+event_BeamSpot_y : value -0.0299547631294
+event_BeamSpot_z : value 0.445962071419
 
-Entries: 20
+Entries: 27
 
