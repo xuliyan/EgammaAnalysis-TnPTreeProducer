@@ -103,6 +103,13 @@ varOptions.register(
     "Threshold for L1 matched objects"
     )
 
+varOptions.register(
+    "isEarly2017", False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "is 2017A or 2017B"
+    )
+
 varOptions.parseArguments()
 
 
@@ -156,27 +163,36 @@ if options['era'] == '2016':
                                    "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
                                   } # Some examples, you can add multiple filters (or OR's of filters, note the vstring) here, each of them will be added to the tuple
 
-elif options['era'] == '2017':
-  options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_L1DoubleEG_v*")
-  options['TnPHLTTagFilters']   = cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter","hltEGL1SingleEGOrFilter")
+elif options['era'] == '2017' and varOptions.isEarly2017:
+  options['TnPPATHS']           = cms.vstring("HLT_Ele35_WPTight_Gsf_v*","HLT_Photon200_v*")
+  options['TnPHLTTagFilters']   = cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
-  options['HLTFILTERSTOMEASURE']= {"passHltEle32DoubleEGWPTightGsf" :                   cms.vstring("hltEle32L1DoubleEGWPTightGsfTrackIsoFilter"),
-                                   "passEGL1SingleEGOr" :                               cms.vstring("hltEGL1SingleEGOrFilter"),
-                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1L1match" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
-                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg2" :        cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg2Filter"),
-                                   "passHltDoubleEle33CaloIdLMWSeedLegL1match" :        cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
-                                   "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
-                                  }
+  options['HLTFILTERSTOMEASURE']= {
+              "passHltEle35Ele115Photon200" : cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter"),
+              "passHltEle35"                : cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter"),
+              "passHltPhoton200"            : cms.vstring("hltEG200HEFilter"),
+              }
+
+elif options['era'] == '2017' and not varOptions.isEarly2017:
+  options['TnPPATHS']           = cms.vstring("HLT_Ele35_WPTight_Gsf_v*","HLT_Ele115_CaloIdVT_GsfTrkIdT*","HLT_Photon200_v*")
+  options['TnPHLTTagFilters']   = cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter")
+  options['TnPHLTProbeFilters'] = cms.vstring()
+  options['HLTFILTERSTOMEASURE']= {
+              "passHltEle35Ele115Photon200" : cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter"),
+              "passHltEle35"                : cms.vstring("hltEle35noerWPTightGsfTrackIsoFilter"),
+              "passHltEle115"               : cms.vstring("hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter"),
+              "passHltPhoton200"            : cms.vstring("hltEG200HEFilter"),
+              }
 
 elif options['era'] == '2018':
-  options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_v*")
-  options['TnPHLTTagFilters']   = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
+  options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_v*","HLT_Ele115_CaloIdVT_GsfTrkIdT_v*","HLT_Photon200_v*")
+  options['TnPHLTTagFilters']   = cms.vstring("hltEle32WPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
-  options['HLTFILTERSTOMEASURE']= {"passHltEle32WPTightGsf" :                           cms.vstring("hltEle32WPTightGsfTrackIsoFilter"),
-                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg1L1match" : cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg1Filter"),
-                                   "passHltEle23Ele12CaloIdLTrackIdLIsoVLLeg2" :        cms.vstring("hltEle23Ele12CaloIdLTrackIdLIsoVLTrackIsoLeg2Filter"),
-                                   "passHltDoubleEle33CaloIdLMWSeedLegL1match" :        cms.vstring("hltEle33CaloIdLMWPMS2Filter"),
-                                   "passHltDoubleEle33CaloIdLMWUnsLeg" :                cms.vstring("hltDiEle33CaloIdLMWPMS2UnseededFilter"),
+  options['HLTFILTERSTOMEASURE']= {
+              "passHltEle32Ele115Photon200" : cms.vstring("hltEle32WPTightGsfTrackIsoFilter","hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter","hltEG200HEFilter"),
+              "passHltEle32"                : cms.vstring("hltEle32WPTightGsfTrackIsoFilter"),
+              "passHltEle115"               : cms.vstring("hltEle115CaloIdVTGsfTrkIdTGsfDphiFilter"),
+              "passHltPhoton200"            : cms.vstring("hltEG200HEFilter"),
                                   }
 else:
   print '%s is not a valid era' % options['era']

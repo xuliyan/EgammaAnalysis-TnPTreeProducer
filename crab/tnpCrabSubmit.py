@@ -4,14 +4,14 @@ import os
 #
 # Example script to submit TnPTreeProducer to crab
 #
-submitVersion = "2020-03-03"
+submitVersion = "2020-03-23"
 doL1matching  = False
 
 defaultArgs   = ['doEleID=True','doPhoID=True','doTrigger=True']
-mainOutputDir = '/store/group/phys_egamma/tnpTuples/%s/%s' % (os.environ['USER'], submitVersion)
+mainOutputDir = '/store/user/%s/TnP/%s' % (os.environ['USER'], submitVersion)
 
 # Logging the current version of TnpTreeProducer here, such that you can find back what the actual code looked like when you were submitting
-os.system('mkdir -p /eos/cms/%s' % mainOutputDir)
+os.system('mkdir -p /eos/uscms/%s' % mainOutputDir)
 os.system('(git log -n 1;git diff) &> /eos/cms/%s/git.log' % mainOutputDir)
 
 
@@ -35,7 +35,7 @@ config.Data.inputDataset               = ''
 config.Data.inputDBS                   = 'global'
 config.Data.publication                = False
 config.Data.allowNonValidInputDataset  = True
-config.Site.storageSite                = 'T2_CH_CERN'
+config.Site.storageSite                = 'T3_US_FNALLPC'
 
 
 #
@@ -94,33 +94,46 @@ def submitWrapper(requestName, sample, era, globalTag, extraParam=[]):
 # List of samples to submit, with eras and global tags
 # If you would switch to AOD, don't forget to add 'isAOD=True' to the defaultArgs!
 #
-era       = '2016'
-globalTag = '94X_dataRun2_v10'
-submitWrapper('Run2016B', '/SingleElectron/Run2016B-07Aug17_ver2-v2/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016C', '/SingleElectron/Run2016C-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016D', '/SingleElectron/Run2016D-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016E', '/SingleElectron/Run2016E-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016F', '/SingleElectron/Run2016F-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016G', '/SingleElectron/Run2016G-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-submitWrapper('Run2016H', '/SingleElectron/Run2016H-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
-
-globalTag = '94X_mcRun2_asymptotic_v3'
-submitWrapper('DY_NLO', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM', era, globalTag)
-submitWrapper('DY_LO',  '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM', era, globalTag)
+#era       = '2016'
+#globalTag = '94X_dataRun2_v10'
+#submitWrapper('Run2016B', '/SingleElectron/Run2016B-07Aug17_ver2-v2/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016C', '/SingleElectron/Run2016C-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016D', '/SingleElectron/Run2016D-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016E', '/SingleElectron/Run2016E-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016F', '/SingleElectron/Run2016F-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016G', '/SingleElectron/Run2016G-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#submitWrapper('Run2016H', '/SingleElectron/Run2016H-07Aug17-v1/MINIAOD', era, globalTag, ['is80X=True'])
+#
+#globalTag = '94X_mcRun2_asymptotic_v3'
+#submitWrapper('DY_NLO', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM', era, globalTag)
+#submitWrapper('DY_LO',  '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM', era, globalTag)
 
 era       = '2017'
 globalTag = '94X_dataRun2_v11'
-submitWrapper('Run2017B', '/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD', era, globalTag)
+submitWrapper('Run2017B_Photon', '/SinglePhoton/Run2017B-31Mar2018-v1/MINIAOD', era, globalTag, ['isEarly2017=True'])
+submitWrapper('Run2017C_Photon', '/SinglePhoton/Run2017C-31Mar2018-v1/MINIAOD', era, globalTag)
+submitWrapper('Run2017D_Photon', '/SinglePhoton/Run2017D-31Mar2018-v1/MINIAOD', era, globalTag)
+submitWrapper('Run2017E_Photon', '/SinglePhoton/Run2017E-31Mar2018-v1/MINIAOD', era, globalTag)
+submitWrapper('Run2017F_Photon', '/SinglePhoton/Run2017F-31Mar2018-v1/MINIAOD', era, globalTag)
+exit()
+submitWrapper('Run2017B', '/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD', era, globalTag, ['isEarly2017=True'])
 submitWrapper('Run2017C', '/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD', era, globalTag)
 submitWrapper('Run2017D', '/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD', era, globalTag)
 submitWrapper('Run2017E', '/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD', era, globalTag)
 submitWrapper('Run2017F', '/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD', era, globalTag)
 
 globalTag = '94X_mc2017_realistic_v17'
-submitWrapper('DY1_LO',     '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM', era, globalTag)
-submitWrapper('DY1_LO_ext', '/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_v3_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM', era, globalTag)
-submitWrapper('DY_NLO',     '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM',  era, globalTag)
-submitWrapper('DY_NLO_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM', era, globalTag)
+submitWrapper('DY17_LO_HT-100to200'         , '/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM'     , era , globalTag)
+submitWrapper('DY17_LO_HT-100to200_newpmx'  , '/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM'  , era , globalTag)
+submitWrapper('DY17_LO_HT-1200to2500'       , '/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'        , era , globalTag)
+submitWrapper('DY17_LO_HT-200to400'         , '/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'          , era , globalTag)
+submitWrapper('DY17_LO_HT-200to400_ext1'    , '/DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM'     , era , globalTag)
+submitWrapper('DY17_LO_HT-2500toInf_newpmx' , '/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM' , era , globalTag)
+submitWrapper('DY17_LO_HT-400to600'         , '/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM'     , era , globalTag)
+submitWrapper('DY17_LO_HT-400to600_newpmx'  , '/DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM'  , era , globalTag)
+submitWrapper('DY17_LO_HT-600to800_newpmx'  , '/DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM'  , era , globalTag)
+submitWrapper('DY17_LO_HT-70to100'          , '/DYJetsToLL_M-50_HT-70to100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'           , era , globalTag)
+submitWrapper('DY17_LO_HT-800to1200_newpmx' , '/DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM' , era , globalTag)
 
 
 
@@ -132,5 +145,11 @@ submitWrapper('Run2018C', '/EGamma/Run2018C-17Sep2018-v1/MINIAOD', era, globalTa
 submitWrapper('Run2018D', '/EGamma/Run2018D-22Jan2019-v2/MINIAOD', era, globalTag)
 
 globalTag = '102X_upgrade2018_realistic_v20'
-submitWrapper('DY',     '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', era, globalTag)
-submitWrapper('DY_pow', '/DYToEE_M-50_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', era, globalTag)
+submitWrapper('DY18_HT-100to200'   , '/DYJetsToLL_M-50_HT-100to200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'      , era , globalTag)
+submitWrapper('DY18_HT-1200to2500' , '/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'    , era , globalTag)
+submitWrapper('DY18_HT-200to400'   , '/DYJetsToLL_M-50_HT-200to400_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'      , era , globalTag)
+submitWrapper('DY18_HT-2500toInf'  , '/DYJetsToLL_M-50_HT-2500toInf_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'     , era , globalTag)
+submitWrapper('DY18_HT-400to600'   , '/DYJetsToLL_M-50_HT-400to600_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v3/MINIAODSIM' , era , globalTag)
+submitWrapper('DY18_HT-600to800'   , '/DYJetsToLL_M-50_HT-600to800_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'      , era , globalTag)
+submitWrapper('DY18_HT-70to100'    , '/DYJetsToLL_M-50_HT-70to100_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'       , era , globalTag)
+submitWrapper('DY18_HT-800to1200'  , '/DYJetsToLL_M-50_HT-800to1200_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'     , era , globalTag)
