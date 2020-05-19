@@ -153,13 +153,15 @@ options['GLOBALTAG']            = varOptions.GT if varOptions.GT != "auto" else 
 # Settings for trigger tag and probe measurement
 #################################################
 if options['era'] == '2016':
-  options['TnPPATHS']           = cms.vstring("HLT_Ele32_WPTight_Gsf_v*","HLT_Photon165_HE10_v*","HLT_Photon175_v*")
-  options['TnPHLTTagFilters']   = cms.vstring("hltEle32WPTightGsfTrackIsoFilter")
+  options['TnPPATHS']           = cms.vstring("HLT_Ele27_eta2p1_WPTight_Gsf_v*","HLT_Photon165_HE10_v*","HLT_Photon175_v*")
+  options['TnPHLTTagFilters']   = cms.vstring("hltEle27erWPTightGsfTrackIsoFilter","hltEG165HE10Filter","hltEG175HEFilter")
   options['TnPHLTProbeFilters'] = cms.vstring()
-  options['HLTFILTERSTOMEASURE']= {"passHltEle32WPTightGsfTrackIsoFilter" :                           cms.vstring("hltEle32WPTightGsfTrackIsoFilter"),
-                                   "passHltEG165HE10Filter" :        cms.vstring("hltEG165HE10Filter"),
-                                   "passHltEG175HEFilter" :                cms.vstring("hltEG175HEFilter"),
-                                  } # Some examples, you can add multiple filters (or OR's of filters, note the vstring) here, each of them will be added to the tuple
+  options['HLTFILTERSTOMEASURE']= {
+                "passHltEle27erWPTightGsfTrackIsoHltEG165HE10HltEG175HE" : cms.vstring("hltEle27erWPTightGsfTrackIsoFilter","hltEG165HE10Filter","hltEG175HEFilter"),
+                "passHltEle27erWPTightGsfTrackIsoFilter" : cms.vstring("hltEle27erWPTightGsfTrackIsoFilter"),
+                "passHltEG165HE10Filter"                 : cms.vstring("hltEG165HE10Filter"),
+                "passHltEG175HEFilter"                   : cms.vstring("hltEG175HEFilter"),
+               } # Some examples, you can add multiple filters (or OR's of filters, note the vstring) here, each of them will be added to the tuple
 
 elif options['era'] == '2017' and varOptions.isEarly2017:
   options['TnPPATHS']           = cms.vstring("HLT_Ele35_WPTight_Gsf_v*","HLT_Photon200_v*")

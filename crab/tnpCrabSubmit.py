@@ -8,17 +8,16 @@ submitVersion = "2020-05-19"
 doL1matching  = False
 
 defaultArgs   = ['doEleID=True','doPhoID=True','doTrigger=True']
-mainOutputDir = '/store/user/%s/TnP/%s' % (os.environ['USER'], submitVersion)
+mainOutputDir = '/store/user/xuyan/TnP/%s' % (submitVersion)
 
 # Logging the current version of TnpTreeProducer here, such that you can find back what the actual code looked like when you were submitting
 os.system('mkdir -p /eos/uscms/%s' % mainOutputDir)
-os.system('(git log -n 1;git diff) &> /eos/cms/%s/git.log' % mainOutputDir)
+os.system('(git log -n 1;git diff) &> /eos/uscms/%s/git.log' % mainOutputDir)
 
 
 #
 # Common CRAB settings
 #
-from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import config
 config = config()
 
