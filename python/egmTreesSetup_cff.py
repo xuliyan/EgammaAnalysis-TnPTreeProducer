@@ -368,4 +368,3 @@ def customize( tnpTree, options ):
         tnpTree.PUWeightSrc = cms.InputTag("pileupReweightingProducer","pileupWeights")
     else:
         tnpTree.isMC = cms.bool( False ) 
- 
